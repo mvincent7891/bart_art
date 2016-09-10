@@ -1,3 +1,3 @@
-import { initializeData } from './utils/initialize_data';
+import { DataInitializer } from './utils/initialize_data';
 
-initializeData();
+const dataObject = new DataInitializer();
