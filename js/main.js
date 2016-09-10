@@ -1,3 +1,3 @@
-import { initializeData } from './data_manipulator';
+import { initializeData } from './utils/initialize_data';
 
 initializeData();
