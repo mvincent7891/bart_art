@@ -1,4 +1,5 @@
 import * as BART_API from './bart.js';
+import { SubwayMap } from './map';
 
 export class DataInitializer {
   constructor () {
@@ -9,6 +10,8 @@ export class DataInitializer {
     this.stationParser = this.stationParser.bind(this);
     this.routesParser = this.routesParser.bind(this);
     this.routeParser = this.routeParser.bind(this);
+    this.constructGraph = this.constructGraph.bind(this);
+    this.graph = {};
     this.dataFetcher();
   }
 
@@ -22,8 +25,8 @@ export class DataInitializer {
     $(message).find('station').each((idx, station) => {
       const abbr = $(station).find('abbr').html();
       const name = $(station).find('name').html();
-      const lat = $(station).find('gtfs_latitude').html();
-      const lng = $(station).find('gtfs_longitude').html();
+      const lat = parseFloat($(station).find('gtfs_latitude').html());
+      const lng = parseFloat($(station).find('gtfs_longitude').html());
       const address = $(station).find('address').html();
       const city = $(station).find('city').html();
       const county = $(station).find('county').html();
@@ -59,7 +62,25 @@ export class DataInitializer {
     this.routeConfig[number] = stations;
     if (Object.keys(this.routeConfig).length ===
         Object.keys(this.routes).length) {
-      console.log(this.routeConfig);
+      this.constructGraph();
     }
+  }
+
+  constructGraph () {
+    let graph = this.graph;
+    Object.keys(this.stations).forEach(abbr => {
+      graph[abbr] = [];
+    });
+    const routeConfig = this.routeConfig;
+    Object.keys(routeConfig).forEach(routeId => {
+      const route = routeConfig[routeId];
+      route.slice(0,(route.length - 1)).forEach((station, index) => {
+        if (!graph[route[index]].includes(route[index + 1])) {
+          graph[route[index]].push(route[index + 1]);
+          graph[route[index + 1]].push(route[index]);
+        }
+      });
+    });
+    const map = new SubwayMap(graph, this.stations);
   }
 }

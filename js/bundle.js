@@ -45,11 +45,15 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	var _initialize_data = __webpack_require__(181);
 	
 	var dataObject = new _initialize_data.DataInitializer();
+	
+	var canvasEl = document.getElementsByTagName("canvas")[0];
+	canvasEl.height = window.innerHeight;
+	canvasEl.width = window.innerWidth;
 
 /***/ },
 
@@ -103,6 +107,8 @@
 	
 	var BART_API = _interopRequireWildcard(_bart);
 	
+	var _map = __webpack_require__(182);
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -118,6 +124,8 @@
 	    this.stationParser = this.stationParser.bind(this);
 	    this.routesParser = this.routesParser.bind(this);
 	    this.routeParser = this.routeParser.bind(this);
+	    this.constructGraph = this.constructGraph.bind(this);
+	    this.graph = {};
 	    this.dataFetcher();
 	  }
 	
@@ -134,8 +142,8 @@
 	      $(message).find('station').each(function (idx, station) {
 	        var abbr = $(station).find('abbr').html();
 	        var name = $(station).find('name').html();
-	        var lat = $(station).find('gtfs_latitude').html();
-	        var lng = $(station).find('gtfs_longitude').html();
+	        var lat = parseFloat($(station).find('gtfs_latitude').html());
+	        var lng = parseFloat($(station).find('gtfs_longitude').html());
 	        var address = $(station).find('address').html();
 	        var city = $(station).find('city').html();
 	        var county = $(station).find('county').html();
@@ -172,12 +180,108 @@
 	      });
 	      this.routeConfig[number] = stations;
 	      if (Object.keys(this.routeConfig).length === Object.keys(this.routes).length) {
-	        console.log(this.routeConfig);
+	        this.constructGraph();
 	      }
+	    }
+	  }, {
+	    key: 'constructGraph',
+	    value: function constructGraph() {
+	      var graph = this.graph;
+	      Object.keys(this.stations).forEach(function (abbr) {
+	        graph[abbr] = [];
+	      });
+	      var routeConfig = this.routeConfig;
+	      Object.keys(routeConfig).forEach(function (routeId) {
+	        var route = routeConfig[routeId];
+	        route.slice(0, route.length - 1).forEach(function (station, index) {
+	          if (!graph[route[index]].includes(route[index + 1])) {
+	            graph[route[index]].push(route[index + 1]);
+	            graph[route[index + 1]].push(route[index]);
+	          }
+	        });
+	      });
+	      var map = new _map.SubwayMap(graph, this.stations);
 	    }
 	  }]);
 
 	  return DataInitializer;
+	}();
+
+/***/ },
+
+/***/ 182:
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var SubwayMap = exports.SubwayMap = function () {
+	  function SubwayMap(graph, stations) {
+	    _classCallCheck(this, SubwayMap);
+	
+	    this.graph = graph;
+	    this.stations = stations;
+	    this.extractCoordLimits = this.extractCoordLimits.bind(this);
+	    this.canvas = document.getElementsByTagName("canvas")[0];
+	    console.log(this.canvas);
+	    this.minX = 0;
+	    this.minY = 0;
+	    this.maxY = parseInt(this.canvas.height);
+	    this.maxX = parseInt(this.canvas.width);
+	    this.extractCoordLimits();
+	  }
+	
+	  _createClass(SubwayMap, [{
+	    key: "extractCoordLimits",
+	    value: function extractCoordLimits() {
+	      var _this = this;
+	
+	      // Pull minimum and maximum lat/lng for normalizing map on canvas
+	      var stations = this.stations;
+	      var stationNames = Object.keys(this.stations);
+	      var firstStation = stations[stationNames[0]];
+	      this.minLat = firstStation.lat;
+	      this.maxLat = firstStation.lat;
+	      this.minLng = firstStation.lng;
+	      this.maxLng = firstStation.lng;
+	      var newStation = void 0;
+	      stationNames.forEach(function (name) {
+	        newStation = stations[name];
+	        if (newStation.lat > _this.maxLat) {
+	          _this.maxLat = newStation.lat;
+	        } else if (newStation.lat < _this.minLat) {
+	          _this.minLat = newStation.lat;
+	        }
+	        if (newStation.lng > _this.maxLng) {
+	          _this.maxLng = newStation.lng;
+	        } else if (newStation.lng < _this.minLng) {
+	          _this.minLng = newStation.lng;
+	        }
+	      });
+	      this.mapCoords(this.maxLng, this.maxLat);
+	      this.mapCoords(this.minLng, this.minLat);
+	    }
+	  }, {
+	    key: "mapCoords",
+	    value: function mapCoords(lng, lat) {
+	      // Pass in (lat, lng); return (x, y) coords for canvas element
+	      var lngRange = this.maxLng - this.minLng;
+	      var latRange = this.maxLat - this.minLat;
+	      var xCoord = Math.floor(this.maxX * (lng - this.minLng) / lngRange);
+	      var yCoord = Math.floor(this.maxY * (lat - this.minLat) / latRange);
+	
+	      return xCoord, yCoord;
+	    }
+	  }]);
+
+	  return SubwayMap;
 	}();
 
 /***/ }
