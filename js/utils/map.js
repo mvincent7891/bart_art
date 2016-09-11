@@ -5,13 +5,40 @@ export class SubwayMap {
     this.graph = graph;
     this.stations = stations;
     this.extractCoordLimits = this.extractCoordLimits.bind(this);
+    this.mapStations = this.mapStations.bind(this);
+    this.mapCircle = this.mapCircle.bind(this);
     this.canvas = document.getElementsByTagName("canvas")[0];
-    console.log(this.canvas);
+    this.ctx = this.canvas.getContext("2d");
     this.minX = 0;
     this.minY = 0;
-    this.maxY = parseInt(this.canvas.height);
-    this.maxX = parseInt(this.canvas.width);
+    this.maxY = parseInt(this.canvas.height) - 40;
+    this.maxX = parseInt(this.canvas.width) - 40;
     this.extractCoordLimits();
+    this.mapStations();
+  }
+
+  mapStations() {
+    let x, y, coords, a, b;
+    Object.keys(this.stations).forEach(station => {
+      x = this.stations[station].lng;
+      y = this.stations[station].lat;
+      [a, b] = this.mapCoords(x,y);
+      this.mapCircle(a, b);
+    });
+  }
+
+  mapCircle (x, y) {
+    this.ctx.fillStyle = "#44a3ec";
+    this.ctx.beginPath();
+    this.ctx.arc(
+      x + 20,
+      y + 20,
+      5,
+      0,
+      2 * Math.PI,
+      false
+    );
+    this.ctx.fill();
   }
 
   extractCoordLimits () {
@@ -37,8 +64,6 @@ export class SubwayMap {
         this.minLng = newStation.lng;
       }
     });
-    this.mapCoords(this.maxLng, this.maxLat);
-    this.mapCoords(this.minLng, this.minLat);
   }
 
   mapCoords(lng, lat) {
@@ -48,7 +73,7 @@ export class SubwayMap {
     const xCoord = Math.floor(this.maxX * (lng - this.minLng) / lngRange);
     const yCoord = Math.floor(this.maxY * (lat - this.minLat) / latRange);
 
-    return(xCoord, yCoord);
+    return([xCoord, this.maxY - yCoord]);
 
   }
 

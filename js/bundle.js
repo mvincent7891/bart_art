@@ -52,8 +52,8 @@
 	var dataObject = new _initialize_data.DataInitializer();
 	
 	var canvasEl = document.getElementsByTagName("canvas")[0];
-	canvasEl.height = window.innerHeight;
-	canvasEl.width = window.innerWidth;
+	canvasEl.height = 540;
+	canvasEl.width = 490;
 
 /***/ },
 
@@ -218,6 +218,8 @@
 	  value: true
 	});
 	
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -229,19 +231,54 @@
 	    this.graph = graph;
 	    this.stations = stations;
 	    this.extractCoordLimits = this.extractCoordLimits.bind(this);
+	    this.mapStations = this.mapStations.bind(this);
+	    this.mapCircle = this.mapCircle.bind(this);
 	    this.canvas = document.getElementsByTagName("canvas")[0];
-	    console.log(this.canvas);
+	    this.ctx = this.canvas.getContext("2d");
 	    this.minX = 0;
 	    this.minY = 0;
-	    this.maxY = parseInt(this.canvas.height);
-	    this.maxX = parseInt(this.canvas.width);
+	    this.maxY = parseInt(this.canvas.height) - 40;
+	    this.maxX = parseInt(this.canvas.width) - 40;
 	    this.extractCoordLimits();
+	    this.mapStations();
 	  }
 	
 	  _createClass(SubwayMap, [{
+	    key: "mapStations",
+	    value: function mapStations() {
+	      var _this = this;
+	
+	      var x = void 0,
+	          y = void 0,
+	          coords = void 0,
+	          a = void 0,
+	          b = void 0;
+	      Object.keys(this.stations).forEach(function (station) {
+	        x = _this.stations[station].lng;
+	        y = _this.stations[station].lat;
+	
+	        var _mapCoords = _this.mapCoords(x, y);
+	
+	        var _mapCoords2 = _slicedToArray(_mapCoords, 2);
+	
+	        a = _mapCoords2[0];
+	        b = _mapCoords2[1];
+	
+	        _this.mapCircle(a, b);
+	      });
+	    }
+	  }, {
+	    key: "mapCircle",
+	    value: function mapCircle(x, y) {
+	      this.ctx.fillStyle = "#44a3ec";
+	      this.ctx.beginPath();
+	      this.ctx.arc(x + 20, y + 20, 5, 0, 2 * Math.PI, false);
+	      this.ctx.fill();
+	    }
+	  }, {
 	    key: "extractCoordLimits",
 	    value: function extractCoordLimits() {
-	      var _this = this;
+	      var _this2 = this;
 	
 	      // Pull minimum and maximum lat/lng for normalizing map on canvas
 	      var stations = this.stations;
@@ -254,19 +291,17 @@
 	      var newStation = void 0;
 	      stationNames.forEach(function (name) {
 	        newStation = stations[name];
-	        if (newStation.lat > _this.maxLat) {
-	          _this.maxLat = newStation.lat;
-	        } else if (newStation.lat < _this.minLat) {
-	          _this.minLat = newStation.lat;
+	        if (newStation.lat > _this2.maxLat) {
+	          _this2.maxLat = newStation.lat;
+	        } else if (newStation.lat < _this2.minLat) {
+	          _this2.minLat = newStation.lat;
 	        }
-	        if (newStation.lng > _this.maxLng) {
-	          _this.maxLng = newStation.lng;
-	        } else if (newStation.lng < _this.minLng) {
-	          _this.minLng = newStation.lng;
+	        if (newStation.lng > _this2.maxLng) {
+	          _this2.maxLng = newStation.lng;
+	        } else if (newStation.lng < _this2.minLng) {
+	          _this2.minLng = newStation.lng;
 	        }
 	      });
-	      this.mapCoords(this.maxLng, this.maxLat);
-	      this.mapCoords(this.minLng, this.minLat);
 	    }
 	  }, {
 	    key: "mapCoords",
@@ -277,7 +312,7 @@
 	      var xCoord = Math.floor(this.maxX * (lng - this.minLng) / lngRange);
 	      var yCoord = Math.floor(this.maxY * (lat - this.minLat) / latRange);
 	
-	      return xCoord, yCoord;
+	      return [xCoord, this.maxY - yCoord];
 	    }
 	  }]);
 
