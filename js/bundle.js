@@ -233,6 +233,7 @@
 	    this.extractCoordLimits = this.extractCoordLimits.bind(this);
 	    this.mapStations = this.mapStations.bind(this);
 	    this.mapCircle = this.mapCircle.bind(this);
+	    this.drawLine = this.drawLine.bind(this);
 	    this.canvas = document.getElementsByTagName("canvas")[0];
 	    this.ctx = this.canvas.getContext("2d");
 	    this.minX = 0;
@@ -248,17 +249,21 @@
 	    value: function mapStations() {
 	      var x = void 0,
 	          y = void 0,
-	          coords = void 0,
 	          a = void 0,
-	          b = void 0;
+	          b = void 0,
+	          x2 = void 0,
+	          y2 = void 0,
+	          c = void 0,
+	          d = void 0;
 	      var graphArray = Object.keys(this.graph);
 	      var graph = this.graph;
-	      var stationsToDraw = [graphArray[0]];
+	      var firstStation = graphArray[Math.floor(Math.random() * graphArray.length)];
+	      var stationsToDraw = [[firstStation, undefined]];
 	      var stationsDrawn = [];
 	      var i = -1;
 	      var station = void 0;
 	      while (stationsToDraw.length > 0) {
-	        station = stationsToDraw[0];
+	        station = stationsToDraw[0][0];
 	        i += 1;
 	        x = this.stations[station].lng;
 	        y = this.stations[station].lat;
@@ -270,32 +275,59 @@
 	        a = _mapCoords2[0];
 	        b = _mapCoords2[1];
 	
+	        if (stationsToDraw[0][1]) {
+	          x2 = this.stations[stationsToDraw[0][1]].lng;
+	          y2 = this.stations[stationsToDraw[0][1]].lat;
+	
+	          var _mapCoords3 = this.mapCoords(x2, y2);
+	
+	          var _mapCoords4 = _slicedToArray(_mapCoords3, 2);
+	
+	          c = _mapCoords4[0];
+	          d = _mapCoords4[1];
+	
+	          this.drawLine(a, b, c, d, i);
+	        }
 	        this.mapCircle(a, b, i);
-	        stationsDrawn.push(stationsToDraw[0]);
+	        stationsDrawn.push(stationsToDraw[0][0]);
 	        graph[station].forEach(function (newStation) {
 	          if (stationsDrawn.indexOf(newStation) === -1) {
-	            stationsToDraw.push(newStation);
+	            stationsToDraw.push([newStation, station]);
 	          }
 	        });
 	        stationsToDraw = stationsToDraw.slice(1);
 	      }
 	    }
 	  }, {
-	    key: "mapCircle",
-	    value: function mapCircle(x, y, i) {
+	    key: "drawLine",
+	    value: function drawLine(x1, y1, x2, y2, i) {
 	      var _this = this;
 	
 	      setTimeout(function () {
-	        _this.ctx.fillStyle = "#44a3ec";
 	        _this.ctx.beginPath();
-	        _this.ctx.arc(x + 20, y + 20, 3, 0, 2 * Math.PI, false);
-	        _this.ctx.fill();
-	      }, 10 * i);
+	        _this.ctx.moveTo(x1 + 20, y1 + 20);
+	        _this.ctx.lineTo(x2 + 20, y2 + 20);
+	        _this.ctx.lineWidth = 1;
+	        _this.ctx.strokeStyle = '#dddddd';
+	        _this.ctx.stroke();
+	      }, 25 * i);
+	    }
+	  }, {
+	    key: "mapCircle",
+	    value: function mapCircle(x, y, i) {
+	      var _this2 = this;
+	
+	      setTimeout(function () {
+	        _this2.ctx.fillStyle = "#676767";
+	        _this2.ctx.beginPath();
+	        _this2.ctx.arc(x + 20, y + 20, 2, 0, 2 * Math.PI, false);
+	        _this2.ctx.fill();
+	      }, 25 * i + 2 * i);
 	    }
 	  }, {
 	    key: "extractCoordLimits",
 	    value: function extractCoordLimits() {
-	      var _this2 = this;
+	      var _this3 = this;
 	
 	      // Pull minimum and maximum lat/lng for normalizing map on canvas
 	      var stations = this.stations;
@@ -308,15 +340,15 @@
 	      var newStation = void 0;
 	      stationNames.forEach(function (name) {
 	        newStation = stations[name];
-	        if (newStation.lat > _this2.maxLat) {
-	          _this2.maxLat = newStation.lat;
-	        } else if (newStation.lat < _this2.minLat) {
-	          _this2.minLat = newStation.lat;
+	        if (newStation.lat > _this3.maxLat) {
+	          _this3.maxLat = newStation.lat;
+	        } else if (newStation.lat < _this3.minLat) {
+	          _this3.minLat = newStation.lat;
 	        }
-	        if (newStation.lng > _this2.maxLng) {
-	          _this2.maxLng = newStation.lng;
-	        } else if (newStation.lng < _this2.minLng) {
-	          _this2.minLng = newStation.lng;
+	        if (newStation.lng > _this3.maxLng) {
+	          _this3.maxLng = newStation.lng;
+	        } else if (newStation.lng < _this3.minLng) {
+	          _this3.minLng = newStation.lng;
 	        }
 	      });
 	    }
