@@ -56,6 +56,11 @@ ul#list li:hover {
   background-color: #80DEEA;
   cursor: pointer;
 }
+
+ul#list li {
+  margin-top: 5px;
+}
+
 ul#list li.selected {
   background-color: #80DEEA;
 }
@@ -74,13 +79,13 @@ li.blank:hover {
 p#instructions {
   position: fixed;
   z-index: 100;
-  top: 60px;
+  top: 50px;
   left: 40px;
 }
 
 p#route {
   position: fixed;
   z-index: 100;
-  top: 80px;
+  top: 70px;
   left: 40px;
 }

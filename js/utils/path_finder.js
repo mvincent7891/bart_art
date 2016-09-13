@@ -9,6 +9,7 @@ export class PathFinder {
     this.initialInstructions = this.initialInstructions.bind(this);
     this.addOnClick = this.addOnClick.bind(this);
     this.selectStation = this.selectStation.bind(this);
+    this.clearPathFinder = this.clearPathFinder.bind(this);
     this.solving = false;
     this.initialInstructions();
     this.addOnClick();
@@ -43,12 +44,25 @@ export class PathFinder {
       this.circles['destination'] = [x, y, 6, '#EC407A'];
       $("#instructions").text(`Solving...`);
       $("#route").text(`${this.origin.name} to ${this.destination.name}`);
-
+      setTimeout(() => this.clearPathFinder(), 2000);
     } else {
       this.destination = this.stations[abbr];
       this.circles['origin'] = [x, y, 6, '#FFC107'];
       $("#instructions").text(`Select destination...`);
     }
+  }
+
+  clearPathFinder() {
+    this.circles['destination'] = [0, 0, 0, '#EC407A'];
+    this.circles['origin'] = [0, 0, 0, '#FFC107'];
+    $("#instructions").text(`Select origin...`);
+    $("#route").text(``);
+    this.destination = undefined;
+    this.origin = undefined;
+    this.solving = false;
+    Object.keys(this.stations).forEach(abbr=> {
+      $(`#${abbr}`).removeClass('selected');
+    });
   }
 
 

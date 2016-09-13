@@ -553,6 +553,7 @@
 	    this.initialInstructions = this.initialInstructions.bind(this);
 	    this.addOnClick = this.addOnClick.bind(this);
 	    this.selectStation = this.selectStation.bind(this);
+	    this.clearPathFinder = this.clearPathFinder.bind(this);
 	    this.solving = false;
 	    this.initialInstructions();
 	    this.addOnClick();
@@ -583,6 +584,8 @@
 	  }, {
 	    key: 'selectStation',
 	    value: function selectStation(abbr) {
+	      var _this2 = this;
+	
 	      var x = this.circles[abbr][0];
 	      var y = this.circles[abbr][1];
 	
@@ -593,11 +596,28 @@
 	        this.circles['destination'] = [x, y, 6, '#EC407A'];
 	        $("#instructions").text('Solving...');
 	        $("#route").text(this.origin.name + ' to ' + this.destination.name);
+	        setTimeout(function () {
+	          return _this2.clearPathFinder();
+	        }, 2000);
 	      } else {
 	        this.destination = this.stations[abbr];
 	        this.circles['origin'] = [x, y, 6, '#FFC107'];
 	        $("#instructions").text('Select destination...');
 	      }
+	    }
+	  }, {
+	    key: 'clearPathFinder',
+	    value: function clearPathFinder() {
+	      this.circles['destination'] = [0, 0, 0, '#EC407A'];
+	      this.circles['origin'] = [0, 0, 0, '#FFC107'];
+	      $("#instructions").text('Select origin...');
+	      $("#route").text('');
+	      this.destination = undefined;
+	      this.origin = undefined;
+	      this.solving = false;
+	      Object.keys(this.stations).forEach(function (abbr) {
+	        $('#' + abbr).removeClass('selected');
+	      });
 	    }
 	  }]);
 
