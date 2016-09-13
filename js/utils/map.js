@@ -19,26 +19,43 @@ export class SubwayMap {
 
   mapStations() {
     let x, y, coords, a, b;
-    Object.keys(this.stations).forEach(station => {
+    const graphArray = Object.keys(this.graph);
+    const graph = this.graph;
+    let stationsToDraw = [graphArray[0]];
+    let stationsDrawn = [];
+    let i = -1;
+    let station;
+    while (stationsToDraw.length > 0) {
+      station = stationsToDraw[0];
+      i += 1;
       x = this.stations[station].lng;
       y = this.stations[station].lat;
       [a, b] = this.mapCoords(x,y);
-      this.mapCircle(a, b);
-    });
+      this.mapCircle(a, b, i);
+      stationsDrawn.push(stationsToDraw[0]);
+      graph[station].forEach(newStation => {
+        if (stationsDrawn.indexOf(newStation) === -1) {
+          stationsToDraw.push(newStation);
+        }
+      });
+      stationsToDraw = stationsToDraw.slice(1);
+    }
   }
 
-  mapCircle (x, y) {
-    this.ctx.fillStyle = "#44a3ec";
-    this.ctx.beginPath();
-    this.ctx.arc(
-      x + 20,
-      y + 20,
-      5,
-      0,
-      2 * Math.PI,
-      false
-    );
-    this.ctx.fill();
+  mapCircle (x, y, i) {
+    setTimeout(() => {
+      this.ctx.fillStyle = "#44a3ec";
+      this.ctx.beginPath();
+      this.ctx.arc(
+        x + 20,
+        y + 20,
+        3,
+        0,
+        2 * Math.PI,
+        false
+      );
+      this.ctx.fill();
+    },10*i)
   }
 
   extractCoordLimits () {

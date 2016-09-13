@@ -77,10 +77,10 @@ export class DataInitializer {
       route.slice(0,(route.length - 1)).forEach((station, index) => {
         if (!graph[route[index]].includes(route[index + 1])) {
           graph[route[index]].push(route[index + 1]);
-          graph[route[index + 1]].push(route[index]);
         }
       });
     });
     const map = new SubwayMap(graph, this.stations);
+    console.log(graph);
   }
 }

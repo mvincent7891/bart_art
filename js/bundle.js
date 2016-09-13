@@ -196,11 +196,11 @@
 	        route.slice(0, route.length - 1).forEach(function (station, index) {
 	          if (!graph[route[index]].includes(route[index + 1])) {
 	            graph[route[index]].push(route[index + 1]);
-	            graph[route[index + 1]].push(route[index]);
 	          }
 	        });
 	      });
 	      var map = new _map.SubwayMap(graph, this.stations);
+	      console.log(graph);
 	    }
 	  }]);
 
@@ -246,34 +246,51 @@
 	  _createClass(SubwayMap, [{
 	    key: "mapStations",
 	    value: function mapStations() {
-	      var _this = this;
-	
 	      var x = void 0,
 	          y = void 0,
 	          coords = void 0,
 	          a = void 0,
 	          b = void 0;
-	      Object.keys(this.stations).forEach(function (station) {
-	        x = _this.stations[station].lng;
-	        y = _this.stations[station].lat;
+	      var graphArray = Object.keys(this.graph);
+	      var graph = this.graph;
+	      var stationsToDraw = [graphArray[0]];
+	      var stationsDrawn = [];
+	      var i = -1;
+	      var station = void 0;
+	      while (stationsToDraw.length > 0) {
+	        station = stationsToDraw[0];
+	        i += 1;
+	        x = this.stations[station].lng;
+	        y = this.stations[station].lat;
 	
-	        var _mapCoords = _this.mapCoords(x, y);
+	        var _mapCoords = this.mapCoords(x, y);
 	
 	        var _mapCoords2 = _slicedToArray(_mapCoords, 2);
 	
 	        a = _mapCoords2[0];
 	        b = _mapCoords2[1];
 	
-	        _this.mapCircle(a, b);
-	      });
+	        this.mapCircle(a, b, i);
+	        stationsDrawn.push(stationsToDraw[0]);
+	        graph[station].forEach(function (newStation) {
+	          if (stationsDrawn.indexOf(newStation) === -1) {
+	            stationsToDraw.push(newStation);
+	          }
+	        });
+	        stationsToDraw = stationsToDraw.slice(1);
+	      }
 	    }
 	  }, {
 	    key: "mapCircle",
-	    value: function mapCircle(x, y) {
-	      this.ctx.fillStyle = "#44a3ec";
-	      this.ctx.beginPath();
-	      this.ctx.arc(x + 20, y + 20, 5, 0, 2 * Math.PI, false);
-	      this.ctx.fill();
+	    value: function mapCircle(x, y, i) {
+	      var _this = this;
+	
+	      setTimeout(function () {
+	        _this.ctx.fillStyle = "#44a3ec";
+	        _this.ctx.beginPath();
+	        _this.ctx.arc(x + 20, y + 20, 3, 0, 2 * Math.PI, false);
+	        _this.ctx.fill();
+	      }, 10 * i);
 	    }
 	  }, {
 	    key: "extractCoordLimits",
