@@ -56,14 +56,14 @@ export class SubwayMap {
       this.ctx.moveTo(x1 + 20, y1 + 20);
       this.ctx.lineTo(x2 + 20, y2 + 20);
       this.ctx.lineWidth = 1;
-      this.ctx.strokeStyle = '#dddddd';
+      this.ctx.strokeStyle = '#272727';
       this.ctx.stroke();
     }, (25 * i));
   }
 
   mapCircle (x, y, i) {
     setTimeout(() => {
-      this.ctx.fillStyle = "#676767";
+      this.ctx.fillStyle = "#272727";
       this.ctx.beginPath();
       this.ctx.arc(
         x + 20,

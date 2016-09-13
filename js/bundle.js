@@ -47,9 +47,9 @@
 
 	"use strict";
 	
-	var _initialize_data = __webpack_require__(181);
+	var _parse_bart = __webpack_require__(184);
 	
-	var dataObject = new _initialize_data.DataInitializer();
+	var dataObject = new _parse_bart.DataInitializer();
 	
 	var canvasEl = document.getElementsByTagName("canvas")[0];
 	canvasEl.height = 540;
@@ -91,7 +91,168 @@
 
 /***/ },
 
-/***/ 181:
+/***/ 182:
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var SubwayMap = exports.SubwayMap = function () {
+	  function SubwayMap(graph, stations) {
+	    _classCallCheck(this, SubwayMap);
+	
+	    this.graph = graph;
+	    this.stations = stations;
+	    this.extractCoordLimits = this.extractCoordLimits.bind(this);
+	    this.mapStations = this.mapStations.bind(this);
+	    this.mapCircle = this.mapCircle.bind(this);
+	    this.drawLine = this.drawLine.bind(this);
+	    this.canvas = document.getElementsByTagName("canvas")[0];
+	    this.ctx = this.canvas.getContext("2d");
+	    this.minX = 0;
+	    this.minY = 0;
+	    this.maxY = parseInt(this.canvas.height) - 40;
+	    this.maxX = parseInt(this.canvas.width) - 40;
+	    this.extractCoordLimits();
+	    this.mapStations();
+	  }
+	
+	  _createClass(SubwayMap, [{
+	    key: "mapStations",
+	    value: function mapStations() {
+	      var x = void 0,
+	          y = void 0,
+	          a = void 0,
+	          b = void 0,
+	          x2 = void 0,
+	          y2 = void 0,
+	          c = void 0,
+	          d = void 0;
+	      var graphArray = Object.keys(this.graph);
+	      var graph = this.graph;
+	      var firstStation = graphArray[Math.floor(Math.random() * graphArray.length)];
+	      var stationsToDraw = [[firstStation, undefined]];
+	      var stationsDrawn = [];
+	      var i = -1;
+	      var station = void 0;
+	      while (stationsToDraw.length > 0) {
+	        station = stationsToDraw[0][0];
+	        i += 1;
+	        x = this.stations[station].lng;
+	        y = this.stations[station].lat;
+	
+	        var _mapCoords = this.mapCoords(x, y);
+	
+	        var _mapCoords2 = _slicedToArray(_mapCoords, 2);
+	
+	        a = _mapCoords2[0];
+	        b = _mapCoords2[1];
+	
+	        if (stationsToDraw[0][1]) {
+	          x2 = this.stations[stationsToDraw[0][1]].lng;
+	          y2 = this.stations[stationsToDraw[0][1]].lat;
+	
+	          var _mapCoords3 = this.mapCoords(x2, y2);
+	
+	          var _mapCoords4 = _slicedToArray(_mapCoords3, 2);
+	
+	          c = _mapCoords4[0];
+	          d = _mapCoords4[1];
+	
+	          this.drawLine(a, b, c, d, i);
+	        }
+	        this.mapCircle(a, b, i);
+	        stationsDrawn.push(stationsToDraw[0][0]);
+	        graph[station].forEach(function (newStation) {
+	          if (stationsDrawn.indexOf(newStation) === -1) {
+	            stationsToDraw.push([newStation, station]);
+	          }
+	        });
+	        stationsToDraw = stationsToDraw.slice(1);
+	      }
+	    }
+	  }, {
+	    key: "drawLine",
+	    value: function drawLine(x1, y1, x2, y2, i) {
+	      var _this = this;
+	
+	      setTimeout(function () {
+	        _this.ctx.beginPath();
+	        _this.ctx.moveTo(x1 + 20, y1 + 20);
+	        _this.ctx.lineTo(x2 + 20, y2 + 20);
+	        _this.ctx.lineWidth = 1;
+	        _this.ctx.strokeStyle = '#272727';
+	        _this.ctx.stroke();
+	      }, 25 * i);
+	    }
+	  }, {
+	    key: "mapCircle",
+	    value: function mapCircle(x, y, i) {
+	      var _this2 = this;
+	
+	      setTimeout(function () {
+	        _this2.ctx.fillStyle = "#272727";
+	        _this2.ctx.beginPath();
+	        _this2.ctx.arc(x + 20, y + 20, 2, 0, 2 * Math.PI, false);
+	        _this2.ctx.fill();
+	      }, 25 * i + 2 * i);
+	    }
+	  }, {
+	    key: "extractCoordLimits",
+	    value: function extractCoordLimits() {
+	      var _this3 = this;
+	
+	      // Pull minimum and maximum lat/lng for normalizing map on canvas
+	      var stations = this.stations;
+	      var stationNames = Object.keys(this.stations);
+	      var firstStation = stations[stationNames[0]];
+	      this.minLat = firstStation.lat;
+	      this.maxLat = firstStation.lat;
+	      this.minLng = firstStation.lng;
+	      this.maxLng = firstStation.lng;
+	      var newStation = void 0;
+	      stationNames.forEach(function (name) {
+	        newStation = stations[name];
+	        if (newStation.lat > _this3.maxLat) {
+	          _this3.maxLat = newStation.lat;
+	        } else if (newStation.lat < _this3.minLat) {
+	          _this3.minLat = newStation.lat;
+	        }
+	        if (newStation.lng > _this3.maxLng) {
+	          _this3.maxLng = newStation.lng;
+	        } else if (newStation.lng < _this3.minLng) {
+	          _this3.minLng = newStation.lng;
+	        }
+	      });
+	    }
+	  }, {
+	    key: "mapCoords",
+	    value: function mapCoords(lng, lat) {
+	      // Pass in (lat, lng); return (x, y) coords for canvas element
+	      var lngRange = this.maxLng - this.minLng;
+	      var latRange = this.maxLat - this.minLat;
+	      var xCoord = Math.floor(this.maxX * (lng - this.minLng) / lngRange);
+	      var yCoord = Math.floor(this.maxY * (lat - this.minLat) / latRange);
+	
+	      return [xCoord, this.maxY - yCoord];
+	    }
+	  }]);
+
+	  return SubwayMap;
+	}();
+
+/***/ },
+
+/***/ 184:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -205,167 +366,6 @@
 	  }]);
 
 	  return DataInitializer;
-	}();
-
-/***/ },
-
-/***/ 182:
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var SubwayMap = exports.SubwayMap = function () {
-	  function SubwayMap(graph, stations) {
-	    _classCallCheck(this, SubwayMap);
-	
-	    this.graph = graph;
-	    this.stations = stations;
-	    this.extractCoordLimits = this.extractCoordLimits.bind(this);
-	    this.mapStations = this.mapStations.bind(this);
-	    this.mapCircle = this.mapCircle.bind(this);
-	    this.drawLine = this.drawLine.bind(this);
-	    this.canvas = document.getElementsByTagName("canvas")[0];
-	    this.ctx = this.canvas.getContext("2d");
-	    this.minX = 0;
-	    this.minY = 0;
-	    this.maxY = parseInt(this.canvas.height) - 40;
-	    this.maxX = parseInt(this.canvas.width) - 40;
-	    this.extractCoordLimits();
-	    this.mapStations();
-	  }
-	
-	  _createClass(SubwayMap, [{
-	    key: "mapStations",
-	    value: function mapStations() {
-	      var x = void 0,
-	          y = void 0,
-	          a = void 0,
-	          b = void 0,
-	          x2 = void 0,
-	          y2 = void 0,
-	          c = void 0,
-	          d = void 0;
-	      var graphArray = Object.keys(this.graph);
-	      var graph = this.graph;
-	      var firstStation = graphArray[Math.floor(Math.random() * graphArray.length)];
-	      var stationsToDraw = [[firstStation, undefined]];
-	      var stationsDrawn = [];
-	      var i = -1;
-	      var station = void 0;
-	      while (stationsToDraw.length > 0) {
-	        station = stationsToDraw[0][0];
-	        i += 1;
-	        x = this.stations[station].lng;
-	        y = this.stations[station].lat;
-	
-	        var _mapCoords = this.mapCoords(x, y);
-	
-	        var _mapCoords2 = _slicedToArray(_mapCoords, 2);
-	
-	        a = _mapCoords2[0];
-	        b = _mapCoords2[1];
-	
-	        if (stationsToDraw[0][1]) {
-	          x2 = this.stations[stationsToDraw[0][1]].lng;
-	          y2 = this.stations[stationsToDraw[0][1]].lat;
-	
-	          var _mapCoords3 = this.mapCoords(x2, y2);
-	
-	          var _mapCoords4 = _slicedToArray(_mapCoords3, 2);
-	
-	          c = _mapCoords4[0];
-	          d = _mapCoords4[1];
-	
-	          this.drawLine(a, b, c, d, i);
-	        }
-	        this.mapCircle(a, b, i);
-	        stationsDrawn.push(stationsToDraw[0][0]);
-	        graph[station].forEach(function (newStation) {
-	          if (stationsDrawn.indexOf(newStation) === -1) {
-	            stationsToDraw.push([newStation, station]);
-	          }
-	        });
-	        stationsToDraw = stationsToDraw.slice(1);
-	      }
-	    }
-	  }, {
-	    key: "drawLine",
-	    value: function drawLine(x1, y1, x2, y2, i) {
-	      var _this = this;
-	
-	      setTimeout(function () {
-	        _this.ctx.beginPath();
-	        _this.ctx.moveTo(x1 + 20, y1 + 20);
-	        _this.ctx.lineTo(x2 + 20, y2 + 20);
-	        _this.ctx.lineWidth = 1;
-	        _this.ctx.strokeStyle = '#dddddd';
-	        _this.ctx.stroke();
-	      }, 25 * i);
-	    }
-	  }, {
-	    key: "mapCircle",
-	    value: function mapCircle(x, y, i) {
-	      var _this2 = this;
-	
-	      setTimeout(function () {
-	        _this2.ctx.fillStyle = "#676767";
-	        _this2.ctx.beginPath();
-	        _this2.ctx.arc(x + 20, y + 20, 2, 0, 2 * Math.PI, false);
-	        _this2.ctx.fill();
-	      }, 25 * i + 2 * i);
-	    }
-	  }, {
-	    key: "extractCoordLimits",
-	    value: function extractCoordLimits() {
-	      var _this3 = this;
-	
-	      // Pull minimum and maximum lat/lng for normalizing map on canvas
-	      var stations = this.stations;
-	      var stationNames = Object.keys(this.stations);
-	      var firstStation = stations[stationNames[0]];
-	      this.minLat = firstStation.lat;
-	      this.maxLat = firstStation.lat;
-	      this.minLng = firstStation.lng;
-	      this.maxLng = firstStation.lng;
-	      var newStation = void 0;
-	      stationNames.forEach(function (name) {
-	        newStation = stations[name];
-	        if (newStation.lat > _this3.maxLat) {
-	          _this3.maxLat = newStation.lat;
-	        } else if (newStation.lat < _this3.minLat) {
-	          _this3.minLat = newStation.lat;
-	        }
-	        if (newStation.lng > _this3.maxLng) {
-	          _this3.maxLng = newStation.lng;
-	        } else if (newStation.lng < _this3.minLng) {
-	          _this3.minLng = newStation.lng;
-	        }
-	      });
-	    }
-	  }, {
-	    key: "mapCoords",
-	    value: function mapCoords(lng, lat) {
-	      // Pass in (lat, lng); return (x, y) coords for canvas element
-	      var lngRange = this.maxLng - this.minLng;
-	      var latRange = this.maxLat - this.minLat;
-	      var xCoord = Math.floor(this.maxX * (lng - this.minLng) / lngRange);
-	      var yCoord = Math.floor(this.maxY * (lat - this.minLat) / latRange);
-	
-	      return [xCoord, this.maxY - yCoord];
-	    }
-	  }]);
-
-	  return SubwayMap;
 	}();
 
 /***/ }

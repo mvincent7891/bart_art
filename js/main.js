@@ -1,4 +1,4 @@
-import { DataInitializer } from './utils/initialize_data';
+import { DataInitializer } from './utils/parse_bart';
 
 const dataObject = new DataInitializer();
 
