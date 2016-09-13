@@ -1,9 +1,12 @@
+import { ListAnimation } from './animate_list';
 
 export class SubwayMap {
 
   constructor (graph, stations) {
     this.graph = graph;
     this.stations = stations;
+    this.stationCircles = {};
+    this.stationLines = [];
     this.extractCoordLimits = this.extractCoordLimits.bind(this);
     this.mapStations = this.mapStations.bind(this);
     this.mapCircle = this.mapCircle.bind(this);
@@ -16,13 +19,17 @@ export class SubwayMap {
     this.maxX = parseInt(this.canvas.width) - 40;
     this.extractCoordLimits();
     this.mapStations();
+    const hover = new ListAnimation(this.stations, this.stationCircles,
+                                    this.stationLines, graph);
   }
 
   mapStations() {
     let x, y, a, b, x2, y2, c, d;
     const graphArray = Object.keys(this.graph);
     const graph = this.graph;
-    let firstStation = graphArray[Math.floor(Math.random() * graphArray.length)];
+    let firstStation = graphArray[0];
+    // To choose random starting station (causes error sometimes):
+    // let firstStation = graphArray[Math.floor(Math.random() * graphArray.length)];
     let stationsToDraw = [[firstStation, undefined]];
     let stationsDrawn = [];
     let i = -1;
@@ -39,7 +46,8 @@ export class SubwayMap {
         [c, d] = this.mapCoords(x2,y2);
         this.drawLine(a, b, c, d, i);
       }
-      this.mapCircle(a, b, i);
+      this.mapCircle(a, b, i, station);
+      this.stationCircles[station] = [a + 20, b + 20, 2, '#474747'];
       stationsDrawn.push(stationsToDraw[0][0]);
       graph[station].forEach(newStation => {
         if (stationsDrawn.indexOf(newStation) === -1) {
@@ -51,19 +59,20 @@ export class SubwayMap {
   }
 
   drawLine (x1, y1, x2, y2, i) {
+    this.stationLines.push([x1 + 20, y1 + 20, x2 + 20, y2 + 20]);
     setTimeout(() => {
       this.ctx.beginPath();
       this.ctx.moveTo(x1 + 20, y1 + 20);
       this.ctx.lineTo(x2 + 20, y2 + 20);
       this.ctx.lineWidth = 1;
-      this.ctx.strokeStyle = '#272727';
+      this.ctx.strokeStyle = '#474747';
       this.ctx.stroke();
     }, (25 * i));
   }
 
   mapCircle (x, y, i) {
     setTimeout(() => {
-      this.ctx.fillStyle = "#272727";
+      this.ctx.fillStyle = "#474747";
       this.ctx.beginPath();
       this.ctx.arc(
         x + 20,

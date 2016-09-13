@@ -1,6 +1,7 @@
 import * as BART_API from './bart.js';
 import { SubwayMap } from './map';
 
+
 export class DataInitializer {
   constructor () {
     this.stations = {};
@@ -22,6 +23,7 @@ export class DataInitializer {
 
   stationParser (message) {
     let stations = this.stations;
+    let $stationEl;
     $(message).find('station').each((idx, station) => {
       const abbr = $(station).find('abbr').html();
       const name = $(station).find('name').html();
@@ -35,6 +37,10 @@ export class DataInitializer {
       const newStation = { abbr, name, lat, lng, address,
                            city, county, state, zipcode };
       stations[abbr] = newStation;
+      $stationEl = $(`<li>${name}</li>`);
+      $stationEl.attr('id', `${abbr}`);
+      $stationEl.attr('class', `truncate`);
+      $("#list").append($stationEl);
     });
   }
 
@@ -81,6 +87,6 @@ export class DataInitializer {
       });
     });
     const map = new SubwayMap(graph, this.stations);
-    console.log(graph);
+
   }
 }

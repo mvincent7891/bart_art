@@ -1,0 +1,86 @@
+body, ul, li, h1 {
+  font-family: 'Ailerons', sans-serif;
+  font-weight: lighter;
+}
+
+canvas {
+  margin-top: 60px;
+}
+
+
+h1 {
+  position: fixed;
+  top: 0px;
+  margin-top: 0px;
+  padding: 20px;
+  background-color: white;
+  width: 100%;
+  z-index: 100;
+}
+
+div#root {
+  display: flex;
+}
+
+ul#list {
+  list-style: none;
+  margin-top: 80px;
+  height: 300px;
+  width: 200px;
+  overflow: scroll;
+}
+
+ul#list:after {
+  position: absolute;
+  top: 50px;
+  bottom: 0;
+  width: 200px;
+  height: 100%;
+  content: "";
+  background: linear-gradient(to bottom,
+     rgba(255,255,255, 1) 100px,
+     rgba(255,255,255, 0) 200px,
+     rgba(255,255,255, 1) 300px
+  );
+  pointer-events: none; /* so the text is still selectable */
+}
+
+.truncate {
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+ul#list li:hover {
+  background-color: #80DEEA;
+  cursor: pointer;
+}
+ul#list li.selected {
+  background-color: #80DEEA;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+li.blank {
+  opacity: 0;
+}
+li.blank:hover {
+  cursor: auto;
+}
+
+p#instructions {
+  position: fixed;
+  z-index: 100;
+  top: 60px;
+  left: 40px;
+}
+
+p#route {
+  position: fixed;
+  z-index: 100;
+  top: 80px;
+  left: 40px;
+}
