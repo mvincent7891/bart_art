@@ -51,22 +51,32 @@
 	
 	var _parse_bart = __webpack_require__(44);
 	
-	var switchCity = function switchCity() {
-	  var canvas = document.getElementsByTagName("canvas")[0];
-	  var ctx = canvas.getContext("2d");
-	  ctx.clearRect(0, 0, canvas.width, canvas.height);
-	  if (citySelector) {
+	var dataObject = void 0;
+	var loadMap = function loadMap(selector) {
+	  $('#modal').attr('class', 'closed');
+	  $('#modal').removeClass('open');
+	  $('#overlay').attr('class', 'closed');
+	  $('#overlay').removeClass('open');
+	  $(changeCity).text('CHANGE');
+	  if (selector) {
 	    dataObject = new _parse_bart.DataInitializerBART();
 	  } else {
 	    dataObject = new _parse_nycmta.DataInitializerNYC();
 	  }
 	};
 	
-	var changeLink = $('#change');
-	$(changeLink).on('click', switchCity);
+	var selectNYC = $('#ny');
+	$(selectNYC).on('click', loadMap.bind(null, false));
+	var selectSF = $('#sf');
+	$(selectSF).on('click', loadMap.bind(null, true));
 	
-	var dataObject = new _parse_nycmta.DataInitializerNYC();
-	var citySelector = true;
+	var changeCity = $('#change');
+	$(changeCity).on('click', function () {
+	  return location.reload();
+	});
+	
+	//let dataObject = new DataInitializerNYC();
+	//let citySelector = true;
 	
 	var canvasEl = document.getElementsByTagName("canvas")[0];
 	canvasEl.height = 560;

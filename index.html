@@ -9,8 +9,8 @@
 
   <body>
     <div class="header">
-      <div><h1 id="title">San Francicso, CA - BART</h1></div>
-      <div><h3 id="change" class="change">CHANGE</h3></div>
+      <div><h1 id="title"></h1></div>
+      <div><h3 id="change" class="change"></h3></div>
     </div>
     <div id="root">
       <div>
@@ -21,6 +21,32 @@
         <p id="route"></p>
       </div>
       <canvas class="canvas"></canvas>
+    </div>
+
+    <div id="modal" class="open">
+      <h2 class="modal-title">BART ART</h2>
+      SELECT A CITY
+      <ul class="city-list">
+        <li id="sf" class="city">San Francisco, CA</li>
+        <li id="ny" class="city">New York, NY</li>
+      </ul>
+      <br>
+      ABOUT
+      <div class="about-div">
+        <p class="about">
+          BartArt enables the visualiztion of search algorithms using metropolitan transit data. The Beta version uses Breadth First Search (BFS) to traverse subway routes in New York City and San Francisco.
+        </p>
+        <p class="about">
+          Simply choose a city, then choose an origin and a destination. BartArt will animate the search process, highlightng visited stations. When the destiantion is found, the the optimal route will be traced from origin to destination.
+        </p>
+        <p class="about">
+            San Francisco data is pulled live from the BART API. Future directions will enable departure and arrival times to be factored into the algorithm, as these are also readily available from the API.
+        </p>
+      </div>
+    </div>
+
+    <div id="overlay" class="open">
+
     </div>
 
     <script src="./js/bundle.js"></script>

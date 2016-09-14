@@ -1,4 +1,4 @@
-body, ul, li, h1, h3 {
+body, ul, li, h1, h2, h3 {
   font-family: 'Ailerons', sans-serif;
   font-weight: lighter;
 }
@@ -24,6 +24,94 @@ h1 {
   background-color: white;
 }
 h3.change:hover {
+  cursor: pointer;
+}
+
+
+#overlay {
+  z-index: 200;
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background-color: rgba(0,0,0,.6);
+}
+
+#modal {
+  z-index: 300;
+  position: fixed;
+  background-color: rgba(240,240,240,.8);
+  top: 20%;
+  margin-left: 20%;
+  margin-right: 20%;
+  width: 60%;
+  height: 40%;
+  min-width: 400px;
+  min-height: 320px;
+  padding: 20px;
+  box-shadow: 4px 4px 4px 2px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+div.about-div {
+  margin-top: 10px;
+  max-height: 100px;
+  width: 80%;
+  overflow: scroll;
+}
+
+h2.modal-title {
+  margin-top: 0px;
+}
+
+p.about {
+  font-weight: lighter;
+  text-align: left;
+  width: 85%;
+  padding-left: 5%;
+  padding-right: 5%;
+  margin-bottom: 10px;
+  margin-top: 0px;
+  border-left: 3px solid #676767;
+}
+
+#modal.closed {
+  display: none;
+}
+
+#modal.open {
+  display: flex;
+}
+#overlay.closed {
+  display: none;
+}
+
+#overlay.open {
+  display: flex;
+}
+
+ul.city-list {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+ul.city-list li {
+  margin: auto;
+  font-size: 12px;
+  height: 25px;
+  transition: all .3s ease-in-out;
+}
+ul.city-list li:hover {
+  font-size: 14px;
   cursor: pointer;
 }
 
