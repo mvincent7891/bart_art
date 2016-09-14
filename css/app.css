@@ -35,50 +35,96 @@ h3.change:hover {
   bottom: 0px;
   left: 0px;
   right: 0px;
-  background-color: rgba(0,0,0,.6);
+  background-color: rgba(0,0,0,.95);
 }
 
 #modal {
   z-index: 300;
   position: fixed;
-  background-color: rgba(240,240,240,.8);
-  top: 20%;
+  background-color: rgba(240,240,240,.95);
+  top: 10%;
   margin-left: 20%;
   margin-right: 20%;
-  width: 60%;
-  height: 40%;
-  min-width: 400px;
-  min-height: 320px;
+  min-width: 475px;
+  height: 475px;
   padding: 20px;
-  box-shadow: 4px 4px 4px 2px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-weight: bold;
-  font-size: 10px;
+  font-size: .75em;
+  color: black;
+
 }
 
 div.about-div {
   margin-top: 10px;
-  max-height: 100px;
+  max-height: 120px;
   width: 80%;
   overflow: scroll;
 }
 
 h2.modal-title {
-  margin-top: 0px;
+  font-size: 1.6em;
+  margin-top: 40px;
+  margin-bottom: 30px;
 }
 
 p.about {
+  color: #444;
   font-weight: lighter;
   text-align: left;
-  width: 85%;
-  padding-left: 5%;
-  padding-right: 5%;
+  width: 90%;
+  padding-left: 4%;
+  padding-right: 0;
   margin-bottom: 10px;
   margin-top: 0px;
-  border-left: 3px solid #676767;
+  border-left: 3px solid #444;
+}
+
+.footer {
+
+}
+
+.footer ul {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  display: flex;
+  position: relative;
+  bottom: -70px;
+  align-items: center;
+}
+
+.footer ul li {
+  margin: 20px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.footer ul li:hover {
+  cursor: pointer;
+}
+
+li.linkedin {
+  background-image: url('http://www.localperceptions.com/wp-content/themes/localperceptions/images/simple-icons-master/icons/linkedin/linkedin-2048-black.png');
+  height: 25px;
+  width: 25px;
+  background-size: 100%;
+}
+li.portfolio {
+  background-image: url('https://cdn3.iconfinder.com/data/icons/dev-toolpack/512/open_folder-512.png');
+  height: 25px;
+  width: 25px;
+  background-size: 100%;
+}
+li.github {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/2000px-Octicons-mark-github.svg.png');
+  height: 25px;
+  width: 25px;
+  background-size: 100%;
 }
 
 #modal.closed {
