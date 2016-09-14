@@ -3,6 +3,11 @@ body, ul, li, h1, h2, h3 {
   font-weight: lighter;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 canvas {
   margin-top: 60px;
 }
@@ -55,7 +60,7 @@ h3.change:hover {
   font-weight: bold;
   font-size: .75em;
   color: black;
-
+  border-radius: 15px;
 }
 
 div.about-div {
@@ -81,10 +86,6 @@ p.about {
   margin-bottom: 10px;
   margin-top: 0px;
   border-left: 3px solid #444;
-}
-
-.footer {
-
 }
 
 .footer ul {
@@ -126,6 +127,7 @@ li.github {
   width: 25px;
   background-size: 100%;
 }
+
 
 #modal.closed {
   display: none;
@@ -242,4 +244,46 @@ p#route {
   z-index: 100;
   top: 70px;
   left: 40px;
+}
+
+.wide-footer {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 200;
+  width: 100%;
+  border-top: 3px solid #676767;
+  background-color: rgba(255,255,255,.9);
+}
+
+.wide-footer {
+  width: 100%;
+}
+
+.wide-footer ul {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+}
+
+.wide-footer ul li {
+  margin: 20px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.wide-footer ul li:hover {
+  cursor: pointer;
+}
+
+.wide-footer.closed {
+  display: none;
+}
+
+.wide-footer.open {
+  display: flex;
 }
