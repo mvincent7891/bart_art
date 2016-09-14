@@ -662,6 +662,7 @@
 	            delete _this3.circles['zz-' + i];
 	          }
 	        }
+	        $("#instructions").text('Select origin...');
 	      }, j * this.interval + 2000);
 	    }
 	  }, {
@@ -703,7 +704,7 @@
 	    value: function clearPathFinder() {
 	      this.circles['destination'] = [0, 0, 0, '#EC407A'];
 	      this.circles['origin'] = [0, 0, 0, '#FFC107'];
-	      $("#instructions").text('Select origin...');
+	
 	      $("#route").text('');
 	      this.destination = undefined;
 	      this.origin = undefined;

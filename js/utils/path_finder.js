@@ -104,6 +104,7 @@ export class PathFinder {
           delete this.circles[`zz-${i}`];
         }
       }
+      $("#instructions").text(`Select origin...`);
     }, (j * this.interval + 2000));
   }
 
@@ -139,7 +140,7 @@ export class PathFinder {
   clearPathFinder() {
     this.circles['destination'] = [0, 0, 0, '#EC407A'];
     this.circles['origin'] = [0, 0, 0, '#FFC107'];
-    $("#instructions").text(`Select origin...`);
+
     $("#route").text(``);
     this.destination = undefined;
     this.origin = undefined;
