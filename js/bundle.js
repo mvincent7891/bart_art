@@ -546,19 +546,25 @@
 	  function PathFinder(stations, circles, lines, graph) {
 	    _classCallCheck(this, PathFinder);
 	
-	    console.log(circles);
-	    console.log(stations);
+	    console.log(graph);
 	    this.circles = circles;
 	    this.stations = stations;
+	    this.graph = graph;
 	    this.initialInstructions = this.initialInstructions.bind(this);
 	    this.addOnClick = this.addOnClick.bind(this);
 	    this.selectStation = this.selectStation.bind(this);
 	    this.clearPathFinder = this.clearPathFinder.bind(this);
+	    this.startSolving = this.startSolving.bind(this);
+	    this.clearSearch = this.clearSearch.bind(this);
+	    this.highlightTrace = this.highlightTrace.bind(this);
+	    this.addCircle = this.addCircle.bind(this);
 	    this.solving = false;
 	    this.initialInstructions();
 	    this.addOnClick();
 	    this.destination = undefined;
 	    this.origin = undefined;
+	
+	    this.interval = 40;
 	  }
 	
 	  _createClass(PathFinder, [{
@@ -584,26 +590,113 @@
 	  }, {
 	    key: 'selectStation',
 	    value: function selectStation(abbr) {
-	      var _this2 = this;
-	
 	      var x = this.circles[abbr][0];
 	      var y = this.circles[abbr][1];
 	
-	      if (this.destination) {
+	      if (this.origin) {
 	        // set arrival and start alorithm
-	        this.origin = this.stations[abbr];
+	        this.destination = this.stations[abbr];
 	        this.solving = true;
 	        this.circles['destination'] = [x, y, 6, '#EC407A'];
-	        $("#instructions").text('Solving...');
+	        $("#instructions").text('Searching...');
 	        $("#route").text(this.origin.name + ' to ' + this.destination.name);
-	        setTimeout(function () {
-	          return _this2.clearPathFinder();
-	        }, 2000);
+	        this.startSolving();
 	      } else {
-	        this.destination = this.stations[abbr];
+	        this.origin = this.stations[abbr];
+	        this.origin['abbr'] = abbr;
+	        console.log(this.origin);
 	        this.circles['origin'] = [x, y, 6, '#FFC107'];
 	        $("#instructions").text('Select destination...');
 	      }
+	    }
+	  }, {
+	    key: 'startSolving',
+	    value: function startSolving() {
+	      var unvisited = [];
+	      var visited = [];
+	      var x = void 0,
+	          y = void 0;
+	      var trace = {};
+	      unvisited.push(this.origin['abbr']);
+	      var nextStation = void 0;
+	      var i = 0;
+	      while (nextStation !== this.destination.abbr) {
+	        i += 1;
+	        nextStation = unvisited[0];
+	        visited.push(unvisited[0]);
+	        unvisited.shift();
+	
+	        this.graph[nextStation].forEach(function (newStation) {
+	          if (visited.indexOf(newStation) === -1) {
+	            trace[newStation] = nextStation;
+	            unvisited.push(newStation);
+	          }
+	        });
+	        x = this.circles[nextStation][0];
+	        y = this.circles[nextStation][1];
+	        this.addCircle(x, y, 5, '#00ACC1', i);
+	      }
+	
+	      this.clearSearch(i, trace);
+	    }
+	  }, {
+	    key: 'clearSearch',
+	    value: function clearSearch(j, trace) {
+	      var _this2 = this;
+	
+	      setTimeout(function () {
+	        for (var i = 0; i <= j; i++) {
+	          delete _this2.circles['zz-' + i];
+	        }
+	        _this2.highlightTrace(trace, j);
+	      }, j * this.interval + 1000);
+	    }
+	  }, {
+	    key: 'clearTrace',
+	    value: function clearTrace(j, trace) {
+	      var _this3 = this;
+	
+	      setTimeout(function () {
+	        for (var i = 0; i <= j; i++) {
+	          if (_this3.circles['zz-' + i]) {
+	            delete _this3.circles['zz-' + i];
+	          }
+	        }
+	      }, j * this.interval + 2000);
+	    }
+	  }, {
+	    key: 'highlightTrace',
+	    value: function highlightTrace(trace, length) {
+	      console.log(this);
+	      var dest = this.destination.abbr;
+	      var origin = this.origin.abbr;
+	      $("#instructions").text('Tracing optimal route...');
+	      var nextStation = dest;
+	      var x = void 0,
+	          y = void 0;
+	      var i = 0;
+	      while (nextStation !== origin) {
+	        i += 1;
+	        x = this.circles[nextStation][0];
+	        y = this.circles[nextStation][1];
+	        this.addCircle(x, y, 5, '#FFC107', length - i);
+	        nextStation = trace[nextStation];
+	      }
+	      i += 1;
+	      x = this.circles[nextStation][0];
+	      y = this.circles[nextStation][1];
+	      this.addCircle(x, y, 5, '#FFC107', length - i);
+	      this.clearPathFinder();
+	      this.clearTrace(length, trace);
+	    }
+	  }, {
+	    key: 'addCircle',
+	    value: function addCircle(x, y, r, color, i) {
+	      var _this4 = this;
+	
+	      setTimeout(function () {
+	        _this4.circles['zz-' + i] = [x, y, r, color];
+	      }, i * this.interval);
 	    }
 	  }, {
 	    key: 'clearPathFinder',

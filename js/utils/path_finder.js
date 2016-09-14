@@ -2,19 +2,25 @@
 
 export class PathFinder {
   constructor (stations, circles, lines, graph) {
-    console.log(circles);
-    console.log(stations);
+    console.log(graph);
     this.circles = circles;
     this.stations = stations;
+    this.graph = graph;
     this.initialInstructions = this.initialInstructions.bind(this);
     this.addOnClick = this.addOnClick.bind(this);
     this.selectStation = this.selectStation.bind(this);
     this.clearPathFinder = this.clearPathFinder.bind(this);
+    this.startSolving = this.startSolving.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
+    this.highlightTrace = this.highlightTrace.bind(this);
+    this.addCircle = this.addCircle.bind(this);
     this.solving = false;
     this.initialInstructions();
     this.addOnClick();
     this.destination = undefined;
     this.origin = undefined;
+
+    this.interval = 40;
   }
 
   initialInstructions() {
@@ -37,19 +43,97 @@ export class PathFinder {
     const x = this.circles[abbr][0];
     const y = this.circles[abbr][1];
 
-    if (this.destination) {
+    if (this.origin) {
       // set arrival and start alorithm
-      this.origin = this.stations[abbr];
+      this.destination = this.stations[abbr];
       this.solving = true;
       this.circles['destination'] = [x, y, 6, '#EC407A'];
-      $("#instructions").text(`Solving...`);
+      $("#instructions").text(`Searching...`);
       $("#route").text(`${this.origin.name} to ${this.destination.name}`);
-      setTimeout(() => this.clearPathFinder(), 2000);
+      this.startSolving();
     } else {
-      this.destination = this.stations[abbr];
+      this.origin = this.stations[abbr];
+      this.origin['abbr'] = abbr;
+      console.log(this.origin);
       this.circles['origin'] = [x, y, 6, '#FFC107'];
       $("#instructions").text(`Select destination...`);
     }
+  }
+
+  startSolving () {
+    let unvisited = [];
+    let visited = [];
+    let x, y;
+    let trace = {};
+    unvisited.push(this.origin['abbr']);
+    let nextStation;
+    let i = 0;
+    while (nextStation !== this.destination.abbr) {
+      i += 1;
+      nextStation = unvisited[0];
+      visited.push(unvisited[0]);
+      unvisited.shift();
+
+      this.graph[nextStation].forEach(newStation => {
+        if (visited.indexOf(newStation) === -1) {
+          trace[newStation] = nextStation;
+          unvisited.push(newStation);
+        }
+      });
+      x = this.circles[nextStation][0];
+      y = this.circles[nextStation][1];
+      this.addCircle(x, y, 5, '#00ACC1', i);
+    }
+
+    this.clearSearch(i, trace);
+  }
+
+  clearSearch (j, trace) {
+    setTimeout(() => {
+      for (var i = 0; i <= j; i++) {
+        delete this.circles[`zz-${i}`];
+      }
+      this.highlightTrace(trace, j);
+    }, (j * this.interval + 1000));
+  }
+
+  clearTrace (j, trace) {
+    setTimeout(() => {
+      for (var i = 0; i <= j; i++) {
+        if (this.circles[`zz-${i}`]) {
+          delete this.circles[`zz-${i}`];
+        }
+      }
+    }, (j * this.interval + 2000));
+  }
+
+  highlightTrace(trace, length) {
+    console.log(this);
+    const dest = this.destination.abbr;
+    const origin = this.origin.abbr;
+    $("#instructions").text(`Tracing optimal route...`);
+    let nextStation = dest;
+    let x, y;
+    let i = 0;
+    while (nextStation !== origin) {
+      i += 1;
+      x = this.circles[nextStation][0];
+      y = this.circles[nextStation][1];
+      this.addCircle(x, y, 5, '#FFC107', (length - i));
+      nextStation = trace[nextStation];
+    }
+    i += 1;
+    x = this.circles[nextStation][0];
+    y = this.circles[nextStation][1];
+    this.addCircle(x, y, 5, '#FFC107', (length - i));
+    this.clearPathFinder();
+    this.clearTrace(length, trace);
+  }
+
+  addCircle (x, y, r, color, i) {
+    setTimeout(() => {
+      this.circles[`zz-${i}`] = [x, y, r, color];
+    }, i * this.interval);
   }
 
   clearPathFinder() {

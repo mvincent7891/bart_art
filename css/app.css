@@ -50,6 +50,7 @@ ul#list:after {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: background 1s;
 }
 
 ul#list li:hover {
