@@ -5,6 +5,7 @@ export class SubwayMap {
   constructor (graph, stations) {
     this.graph = graph;
     this.stations = stations;
+    this.interval = Math.floor(1000 / Object.keys(this.stations).length);
     this.stationCircles = {};
     this.stationLines = [];
     this.extractCoordLimits = this.extractCoordLimits.bind(this);
@@ -15,8 +16,10 @@ export class SubwayMap {
     this.ctx = this.canvas.getContext("2d");
     this.minX = 0;
     this.minY = 0;
-    this.maxY = parseInt(this.canvas.height) - 40;
-    this.maxX = parseInt(this.canvas.width) - 40;
+    // this.maxY = parseInt(this.canvas.height) - 40;
+    // this.maxX = parseInt(this.canvas.width) - 40;
+    this.maxY = 520;
+    this.maxX = 420;
     this.extractCoordLimits();
     this.mapStations();
     const hover = new ListAnimation(this.stations, this.stationCircles,
@@ -67,7 +70,7 @@ export class SubwayMap {
       this.ctx.lineWidth = 1;
       this.ctx.strokeStyle = '#474747';
       this.ctx.stroke();
-    }, (25 * i));
+    }, (this.interval * i));
   }
 
   mapCircle (x, y, i) {
@@ -83,7 +86,7 @@ export class SubwayMap {
         false
       );
       this.ctx.fill();
-    }, ((25*i) + (2 * i)) );
+    }, ((this.interval * i)) );
   }
 
   extractCoordLimits () {

@@ -1,4 +1,4 @@
-body, ul, li, h1 {
+body, ul, li, h1, h3 {
   font-family: 'Ailerons', sans-serif;
   font-weight: lighter;
 }
@@ -7,15 +7,34 @@ canvas {
   margin-top: 60px;
 }
 
-
-h1 {
+div.header {
+  display:flex;
   position: fixed;
   top: 0px;
   margin-top: 0px;
   padding: 20px;
-  background-color: white;
   width: 100%;
   z-index: 100;
+  align-items: flex-end;
+}
+
+h1 {
+  padding: 0px;
+  margin: 0px;
+  background-color: white;
+}
+h3.change:hover {
+  cursor: pointer;
+}
+
+h3.change {
+  padding: 0px;
+  margin: 0px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  font-size: .7em;
+  font-weight: normal;
+  color: #676767;
 }
 
 div#root {

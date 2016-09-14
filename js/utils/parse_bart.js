@@ -1,9 +1,9 @@
 import * as BART_API from './bart.js';
 import { SubwayMap } from './map';
 
-
-export class DataInitializer {
+export class DataInitializerBART {
   constructor () {
+    $("#title").text(`San Francicso, CA - BART`);
     this.stations = {};
     this.routes = {};
     this.routeConfig = {};

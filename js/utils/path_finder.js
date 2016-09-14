@@ -2,7 +2,6 @@
 
 export class PathFinder {
   constructor (stations, circles, lines, graph) {
-    console.log(graph);
     this.circles = circles;
     this.stations = stations;
     this.graph = graph;
@@ -20,7 +19,7 @@ export class PathFinder {
     this.destination = undefined;
     this.origin = undefined;
 
-    this.interval = 40;
+    this.interval = Math.floor(3000 / Object.keys(this.stations).length);
   }
 
   initialInstructions() {
@@ -94,7 +93,7 @@ export class PathFinder {
         delete this.circles[`zz-${i}`];
       }
       this.highlightTrace(trace, j);
-    }, (j * this.interval + 1000));
+    }, (j * this.interval + 500));
   }
 
   clearTrace (j, trace) {
@@ -105,7 +104,7 @@ export class PathFinder {
         }
       }
       $("#instructions").text(`Select origin...`);
-    }, (j * this.interval + 2000));
+    }, (j * (this.interval) + 2500));
   }
 
   highlightTrace(trace, length) {

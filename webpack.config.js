@@ -8,6 +8,9 @@ module.exports = {
     devtoolModuleFilenameTemplate: '[resourcePath]',
     devtoolFallbackModuleFilenameTemplate: '[resourcePath]?[hash]'
   },
+  node: {
+    fs: "empty"
+  },
   module: {
     loaders: [
       {
