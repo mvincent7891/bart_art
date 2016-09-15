@@ -1,8 +1,8 @@
-## BartArt Proposal
+## Transit PathFinder Proposal
 
 ### Background
 
-BartArt is a path-finding algorithm visualizer, similar to [PathFinding.js][pfjs]
+Transit PathFinder is a path-finding algorithm visualizer, similar to [PathFinding.js][pfjs]
 [pfjs]https://qiao.github.io/PathFinding.js/visual/. The app will allow a user to select a city and destination and arrival stations. Next, it animates the process of finding the shortest path between the two stations. In the minimally viable product, shortest path will be calculated as the minimal number of nodes between the stations. In future versions, distance between stations as well as real time arrival and departure data will be used to calculate shortest paths.
 
 ### Functionality & MVP  
@@ -17,7 +17,7 @@ Users will be able to:
 In addition, this project will include:
 
 - [ ] Interesting animation of subway system at user selection of city
-- [ ] An About modal describing the features of the app technologies utilized
+- [ ] An About section describing the features of the app and technologies utilized
 - [ ] A production README
 - [ ] Real time data streaming from public transit authorities to gather info (station names, lat, lng, line, etc.) about subway systems.
 
