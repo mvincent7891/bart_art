@@ -677,6 +677,7 @@
 	    this.startSolving = this.startSolving.bind(this);
 	    this.clearSearch = this.clearSearch.bind(this);
 	    this.highlightTrace = this.highlightTrace.bind(this);
+	    this.addClickAnywhere = this.addClickAnywhere.bind(this);
 	    this.addCircle = this.addCircle.bind(this);
 	    this.solving = false;
 	    this.initialInstructions();
@@ -774,16 +775,12 @@
 	  }, {
 	    key: 'clearTrace',
 	    value: function clearTrace(j, trace) {
-	      var _this3 = this;
-	
-	      setTimeout(function () {
-	        for (var i = 0; i <= j; i++) {
-	          if (_this3.circles['zz-' + i]) {
-	            delete _this3.circles['zz-' + i];
-	          }
+	      for (var i = 0; i <= j; i++) {
+	        if (this.circles['zz-' + i]) {
+	          delete this.circles['zz-' + i];
 	        }
-	        $("#instructions").text('Select origin...');
-	      }, j * this.interval + 2500);
+	      }
+	      $("#instructions").text('Select origin...');
 	    }
 	  }, {
 	    key: 'highlightTrace',
@@ -807,8 +804,22 @@
 	      x = this.circles[nextStation][0];
 	      y = this.circles[nextStation][1];
 	      this.addCircle(x, y, this.size, '#FFC107', length - i);
-	      this.clearPathFinder();
-	      this.clearTrace(length, trace);
+	      this.addClickAnywhere(length, trace);
+	    }
+	  }, {
+	    key: 'addClickAnywhere',
+	    value: function addClickAnywhere(length, trace) {
+	      var _this3 = this;
+	
+	      setTimeout(function () {
+	        $("#instructions").text('Click anywhere...');
+	      }, length * this.interval);
+	      $("#route").text('');
+	      $('body').on('click', function () {
+	        $('body').off();
+	        _this3.clearPathFinder();
+	        _this3.clearTrace(length, trace);
+	      });
 	    }
 	  }, {
 	    key: 'addCircle',
@@ -824,8 +835,6 @@
 	    value: function clearPathFinder() {
 	      this.circles['destination'] = [0, 0, 0, '#EC407A'];
 	      this.circles['origin'] = [0, 0, 0, '#FFC107'];
-	
-	      $("#route").text('');
 	      this.destination = undefined;
 	      this.origin = undefined;
 	      this.solving = false;

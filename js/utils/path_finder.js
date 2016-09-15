@@ -12,6 +12,7 @@ export class PathFinder {
     this.startSolving = this.startSolving.bind(this);
     this.clearSearch = this.clearSearch.bind(this);
     this.highlightTrace = this.highlightTrace.bind(this);
+    this.addClickAnywhere = this.addClickAnywhere.bind(this);
     this.addCircle = this.addCircle.bind(this);
     this.solving = false;
     this.initialInstructions();
@@ -97,14 +98,12 @@ export class PathFinder {
   }
 
   clearTrace (j, trace) {
-    setTimeout(() => {
-      for (var i = 0; i <= j; i++) {
-        if (this.circles[`zz-${i}`]) {
-          delete this.circles[`zz-${i}`];
-        }
+    for (var i = 0; i <= j; i++) {
+      if (this.circles[`zz-${i}`]) {
+        delete this.circles[`zz-${i}`];
       }
-      $("#instructions").text(`Select origin...`);
-    }, (j * (this.interval) + 2500));
+    }
+    $("#instructions").text(`Select origin...`);
   }
 
   highlightTrace(trace, length) {
@@ -126,8 +125,20 @@ export class PathFinder {
     x = this.circles[nextStation][0];
     y = this.circles[nextStation][1];
     this.addCircle(x, y, this.size, '#FFC107', (length - i));
-    this.clearPathFinder();
-    this.clearTrace(length, trace);
+    this.addClickAnywhere(length, trace);
+
+  }
+
+  addClickAnywhere (length, trace) {
+    setTimeout(() => {
+      $("#instructions").text(`Click anywhere...`);
+    }, length * this.interval);
+    $("#route").text('');
+    $('body').on('click', () => {
+      $('body').off();
+      this.clearPathFinder();
+      this.clearTrace(length, trace);
+    });
   }
 
   addCircle (x, y, r, color, i) {
@@ -139,8 +150,6 @@ export class PathFinder {
   clearPathFinder() {
     this.circles['destination'] = [0, 0, 0, '#EC407A'];
     this.circles['origin'] = [0, 0, 0, '#FFC107'];
-
-    $("#route").text(``);
     this.destination = undefined;
     this.origin = undefined;
     this.solving = false;
