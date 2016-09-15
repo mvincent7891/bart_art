@@ -7,13 +7,18 @@ export class DataInitializerBART {
     this.stations = {};
     this.routes = {};
     this.routeConfig = {};
+    this.bindFunctions = this.bindFunctions.bind(this);
+    this.bindFunctions();
+    this.graph = {};
+    this.dataFetcher();
+  }
+
+  bindFunctions () {
     this.dataFetcher = this.dataFetcher.bind(this);
     this.stationParser = this.stationParser.bind(this);
     this.routesParser = this.routesParser.bind(this);
     this.routeParser = this.routeParser.bind(this);
     this.constructGraph = this.constructGraph.bind(this);
-    this.graph = {};
-    this.dataFetcher();
   }
 
   dataFetcher () {

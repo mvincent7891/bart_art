@@ -12,17 +12,17 @@ export class DataInitializerNYC {
     this.stationNames = {};
     this.routeConfig = {};
     this.graph = {};
-    this.stationParser = this.stationParser.bind(this);
-    this.routesParser = this.routesParser.bind(this);
-    this.routesParser = this.routesParser.bind(this);
-    // this.dataFetcher();
+    this.bindFunctions = this.bindFunctions.bind(this);
+    this.bindFunctions();
     this.routesParser();
     this.stationParser();
     this.constructGraph();
   }
 
-  dataFetcher () {
-    // NYC_API.fetchStationData(this.stationParser);
+  bindFunctions () {
+    this.stationParser = this.stationParser.bind(this);
+    this.routesParser = this.routesParser.bind(this);
+    this.routesParser = this.routesParser.bind(this);
   }
 
   stationParser () {

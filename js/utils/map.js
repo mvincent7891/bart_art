@@ -8,11 +8,9 @@ export class SubwayMap {
     this.stationCircles = {};
     this.stationLines = [];
     this.interval = Math.floor(1000 / Object.keys(this.stations).length);
-
-    this.extractCoordLimits = this.extractCoordLimits.bind(this);
-    this.mapStations = this.mapStations.bind(this);
-    this.mapCircle = this.mapCircle.bind(this);
-    this.drawLine = this.drawLine.bind(this);
+  
+    this.bindFunctions = this.bindFunctions.bind(this);
+    this.bindFunctions();
 
     this.canvas = document.getElementsByTagName("canvas")[0];
     this.ctx = this.canvas.getContext("2d");
@@ -26,6 +24,13 @@ export class SubwayMap {
     this.mapStations();
     const hover = new ListAnimation(this.stations, this.stationCircles,
                                     this.stationLines, graph);
+  }
+
+  bindFunctions () {
+    this.extractCoordLimits = this.extractCoordLimits.bind(this);
+    this.mapStations = this.mapStations.bind(this);
+    this.mapCircle = this.mapCircle.bind(this);
+    this.drawLine = this.drawLine.bind(this);
   }
 
   mapStations() {

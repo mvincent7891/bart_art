@@ -5,15 +5,10 @@ export class PathFinder {
     this.circles = circles;
     this.stations = stations;
     this.graph = graph;
-    this.initialInstructions = this.initialInstructions.bind(this);
-    this.addOnClick = this.addOnClick.bind(this);
-    this.selectStation = this.selectStation.bind(this);
-    this.clearPathFinder = this.clearPathFinder.bind(this);
-    this.startSolving = this.startSolving.bind(this);
-    this.clearSearch = this.clearSearch.bind(this);
-    this.highlightTrace = this.highlightTrace.bind(this);
-    this.addClickAnywhere = this.addClickAnywhere.bind(this);
-    this.addCircle = this.addCircle.bind(this);
+
+    this.bindFunctions = this.bindFunctions.bind(this);
+    this.bindFunctions();
+
     this.solving = false;
     this.initialInstructions();
     this.addOnClick();
@@ -21,6 +16,18 @@ export class PathFinder {
     this.origin = undefined;
     this.size = 3;
     this.interval = Math.floor(3000 / Object.keys(this.stations).length);
+  }
+
+  bindFunctions () {
+    this.initialInstructions = this.initialInstructions.bind(this);
+    this.addClickAnywhere = this.addClickAnywhere.bind(this);
+    this.clearPathFinder = this.clearPathFinder.bind(this);
+    this.highlightTrace = this.highlightTrace.bind(this);
+    this.selectStation = this.selectStation.bind(this);
+    this.startSolving = this.startSolving.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
+    this.addOnClick = this.addOnClick.bind(this);
+    this.addCircle = this.addCircle.bind(this);
   }
 
   initialInstructions() {

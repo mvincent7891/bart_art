@@ -7,12 +7,8 @@ export class ListAnimation {
     this.circles = circles;
     this.lines = lines;
 
-    this.addOnHover = this.addOnHover.bind(this);
-    this.drawCircles = this.drawCircles.bind(this);
-    this.drawLines = this.drawLines.bind(this);
-    this.updateList = this.updateList.bind(this);
-    this.clearCanvas = this.clearCanvas.bind(this);
-    this.startAnimating = this.startAnimating.bind(this);
+    this.bindFunctions = this.bindFunctions.bind(this);
+    this.bindFunctions();
 
     this.canvas = document.getElementsByTagName("canvas")[0];
     this.ctx = this.canvas.getContext("2d");
@@ -23,6 +19,15 @@ export class ListAnimation {
       this.pathFinder = new PathFinder(this.stations, this.circles,
                                        this.lines, graph);
     }, 2000);
+  }
+
+  bindFunctions () {
+    this.drawLines = this.drawLines.bind(this);
+    this.addOnHover = this.addOnHover.bind(this);
+    this.updateList = this.updateList.bind(this);
+    this.drawCircles = this.drawCircles.bind(this);
+    this.clearCanvas = this.clearCanvas.bind(this);
+    this.startAnimating = this.startAnimating.bind(this);
   }
 
   updateList () {

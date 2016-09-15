@@ -121,19 +121,19 @@
 	    this.stationNames = {};
 	    this.routeConfig = {};
 	    this.graph = {};
-	    this.stationParser = this.stationParser.bind(this);
-	    this.routesParser = this.routesParser.bind(this);
-	    this.routesParser = this.routesParser.bind(this);
-	    // this.dataFetcher();
+	    this.bindFunctions = this.bindFunctions.bind(this);
+	    this.bindFunctions();
 	    this.routesParser();
 	    this.stationParser();
 	    this.constructGraph();
 	  }
 	
 	  _createClass(DataInitializerNYC, [{
-	    key: 'dataFetcher',
-	    value: function dataFetcher() {
-	      // NYC_API.fetchStationData(this.stationParser);
+	    key: 'bindFunctions',
+	    value: function bindFunctions() {
+	      this.stationParser = this.stationParser.bind(this);
+	      this.routesParser = this.routesParser.bind(this);
+	      this.routesParser = this.routesParser.bind(this);
 	    }
 	  }, {
 	    key: 'stationParser',
@@ -345,10 +345,8 @@
 	    this.stationLines = [];
 	    this.interval = Math.floor(1000 / Object.keys(this.stations).length);
 	
-	    this.extractCoordLimits = this.extractCoordLimits.bind(this);
-	    this.mapStations = this.mapStations.bind(this);
-	    this.mapCircle = this.mapCircle.bind(this);
-	    this.drawLine = this.drawLine.bind(this);
+	    this.bindFunctions = this.bindFunctions.bind(this);
+	    this.bindFunctions();
 	
 	    this.canvas = document.getElementsByTagName("canvas")[0];
 	    this.ctx = this.canvas.getContext("2d");
@@ -364,6 +362,14 @@
 	  }
 	
 	  _createClass(SubwayMap, [{
+	    key: "bindFunctions",
+	    value: function bindFunctions() {
+	      this.extractCoordLimits = this.extractCoordLimits.bind(this);
+	      this.mapStations = this.mapStations.bind(this);
+	      this.mapCircle = this.mapCircle.bind(this);
+	      this.drawLine = this.drawLine.bind(this);
+	    }
+	  }, {
 	    key: "mapStations",
 	    value: function mapStations() {
 	      var x = void 0,
@@ -520,12 +526,8 @@
 	    this.circles = circles;
 	    this.lines = lines;
 	
-	    this.addOnHover = this.addOnHover.bind(this);
-	    this.drawCircles = this.drawCircles.bind(this);
-	    this.drawLines = this.drawLines.bind(this);
-	    this.updateList = this.updateList.bind(this);
-	    this.clearCanvas = this.clearCanvas.bind(this);
-	    this.startAnimating = this.startAnimating.bind(this);
+	    this.bindFunctions = this.bindFunctions.bind(this);
+	    this.bindFunctions();
 	
 	    this.canvas = document.getElementsByTagName("canvas")[0];
 	    this.ctx = this.canvas.getContext("2d");
@@ -542,6 +544,16 @@
 	  }
 	
 	  _createClass(ListAnimation, [{
+	    key: "bindFunctions",
+	    value: function bindFunctions() {
+	      this.drawLines = this.drawLines.bind(this);
+	      this.addOnHover = this.addOnHover.bind(this);
+	      this.updateList = this.updateList.bind(this);
+	      this.drawCircles = this.drawCircles.bind(this);
+	      this.clearCanvas = this.clearCanvas.bind(this);
+	      this.startAnimating = this.startAnimating.bind(this);
+	    }
+	  }, {
 	    key: "updateList",
 	    value: function updateList() {
 	      var $blankEl = void 0;
@@ -665,15 +677,10 @@
 	    this.circles = circles;
 	    this.stations = stations;
 	    this.graph = graph;
-	    this.initialInstructions = this.initialInstructions.bind(this);
-	    this.addOnClick = this.addOnClick.bind(this);
-	    this.selectStation = this.selectStation.bind(this);
-	    this.clearPathFinder = this.clearPathFinder.bind(this);
-	    this.startSolving = this.startSolving.bind(this);
-	    this.clearSearch = this.clearSearch.bind(this);
-	    this.highlightTrace = this.highlightTrace.bind(this);
-	    this.addClickAnywhere = this.addClickAnywhere.bind(this);
-	    this.addCircle = this.addCircle.bind(this);
+	
+	    this.bindFunctions = this.bindFunctions.bind(this);
+	    this.bindFunctions();
+	
 	    this.solving = false;
 	    this.initialInstructions();
 	    this.addOnClick();
@@ -684,6 +691,19 @@
 	  }
 	
 	  _createClass(PathFinder, [{
+	    key: 'bindFunctions',
+	    value: function bindFunctions() {
+	      this.initialInstructions = this.initialInstructions.bind(this);
+	      this.addClickAnywhere = this.addClickAnywhere.bind(this);
+	      this.clearPathFinder = this.clearPathFinder.bind(this);
+	      this.highlightTrace = this.highlightTrace.bind(this);
+	      this.selectStation = this.selectStation.bind(this);
+	      this.startSolving = this.startSolving.bind(this);
+	      this.clearSearch = this.clearSearch.bind(this);
+	      this.addOnClick = this.addOnClick.bind(this);
+	      this.addCircle = this.addCircle.bind(this);
+	    }
+	  }, {
 	    key: 'initialInstructions',
 	    value: function initialInstructions() {
 	      $("#instructions").text('Select origin...');
@@ -919,16 +939,22 @@
 	    this.stations = {};
 	    this.routes = {};
 	    this.routeConfig = {};
-	    this.dataFetcher = this.dataFetcher.bind(this);
-	    this.stationParser = this.stationParser.bind(this);
-	    this.routesParser = this.routesParser.bind(this);
-	    this.routeParser = this.routeParser.bind(this);
-	    this.constructGraph = this.constructGraph.bind(this);
+	    this.bindFunctions = this.bindFunctions.bind(this);
+	    this.bindFunctions();
 	    this.graph = {};
 	    this.dataFetcher();
 	  }
 	
 	  _createClass(DataInitializerBART, [{
+	    key: 'bindFunctions',
+	    value: function bindFunctions() {
+	      this.dataFetcher = this.dataFetcher.bind(this);
+	      this.stationParser = this.stationParser.bind(this);
+	      this.routesParser = this.routesParser.bind(this);
+	      this.routeParser = this.routeParser.bind(this);
+	      this.constructGraph = this.constructGraph.bind(this);
+	    }
+	  }, {
 	    key: 'dataFetcher',
 	    value: function dataFetcher() {
 	      BART_API.fetchRoutes(this.routesParser);
