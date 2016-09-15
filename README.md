@@ -56,4 +56,9 @@ Object.keys(routeConfig).forEach(routeId => {
 Stylistically, Transit PathFinder employs a minimalist design, with plenty of white space, primarily black and white color scheme, and a few highlights. This style is achieved with pure CSS and HTML5 Canvas.
 
 ## Future Directions
-The next step for TPF will incorporate distances between stations instead of simple node count when determining optimal routes. The logic will be a bit more complicated: when choosing between children
+
+### Additional Algorithms
+The next step for TPF will incorporate distances between stations instead of simple node count when determining optimal routes. To that end, Dijsktra's algorithm will be used instead of simple BFS. When a user selects the origin, TPF will traverse the entire graph and calculate the shortest path between the source and each additional node. 
+
+### Additional Cities
+Future version will also include more cities (Washington DC, London, Mumbai, Chicago).
