@@ -10,23 +10,29 @@ a {
 
 canvas {
   margin-top: 60px;
+
 }
 
 div.header {
   display:flex;
   position: fixed;
   top: 0px;
+  left: 0px;
   margin-top: 0px;
   padding: 20px;
+  padding-bottom: 40px;
   width: 100%;
   z-index: 100;
+  background-color: rgba(255,255,255,.95);
   align-items: flex-end;
+  border-bottom: 3px solid #272727;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
 h1 {
   padding: 0px;
   margin: 0px;
-  background-color: white;
+
 }
 h3.change:hover {
   cursor: pointer;
@@ -50,8 +56,8 @@ h3.change:hover {
   top: 10%;
   margin-left: 20%;
   margin-right: 20%;
-  min-width: 475px;
-  height: 475px;
+  min-width: 450px;
+  height: 450px;
   padding: 20px;
   box-sizing: border-box;
   display: flex;
@@ -94,7 +100,7 @@ p.about {
   margin: 0px;
   display: flex;
   position: relative;
-  bottom: -70px;
+  bottom: -50px;
   align-items: center;
 }
 
@@ -178,24 +184,25 @@ div#root {
 }
 
 ul#list {
+  position: fixed;
   list-style: none;
-  margin-top: 80px;
-  height: 300px;
+  margin-top: 40px;
+  height: 400px;
   width: 200px;
   overflow: scroll;
 }
 
 ul#list:after {
-  position: absolute;
+  position: fixed;
   top: 50px;
   bottom: 0;
   width: 200px;
   height: 100%;
   content: "";
   background: linear-gradient(to bottom,
-     rgba(255,255,255, 1) 100px,
+     rgba(255,255,255, 1) 80px,
      rgba(255,255,255, 0) 200px,
-     rgba(255,255,255, 1) 300px
+     rgba(255,255,255, 1) 400px
   );
   pointer-events: none; /* so the text is still selectable */
 }
@@ -253,8 +260,13 @@ p#route {
   right: 0px;
   z-index: 200;
   width: 100%;
-  border-top: 3px solid #676767;
-  background-color: rgba(255,255,255,.9);
+  border-top: 3px solid #272727;
+  box-shadow: 1px -1px 2px 1px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255,255,255,.8);
+}
+
+.canvas-container {
+  padding-left: 240px;
 }
 
 .wide-footer {
@@ -271,9 +283,12 @@ p#route {
 
 .wide-footer ul li {
   margin: 20px;
+  margin-top: 8px;
+  margin-bottom: 12px;
   height: 25px;
   display: flex;
   align-items: center;
+  font-size: .8em;
 }
 
 .wide-footer ul li:hover {
@@ -282,8 +297,4 @@ p#route {
 
 .wide-footer.closed {
   display: none;
-}
-
-.wide-footer.open {
-  display: flex;
 }

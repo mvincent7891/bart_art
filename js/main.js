@@ -1,3 +1,9 @@
+// Potential zoom
+// Bigger image to startSolving
+// Larger scroll area
+// Trace needs to stay longer
+// Maybe view transfers one by one
+
 import { DataInitializerNYC } from './utils/parse_nycmta';
 import { DataInitializerBART } from './utils/parse_bart';
 
@@ -7,6 +13,7 @@ const loadMap = selector => {
   $('#modal').removeClass('open');
   $('#overlay').attr('class', 'closed');
   $('#overlay').removeClass('open');
+  $('#footer').removeClass('closed');
   $(changeCity).text('CHANGE');
   if (selector) {
     dataObject = new DataInitializerBART();
@@ -27,5 +34,5 @@ $(changeCity).on('click', () => location.reload());
 //let citySelector = true;
 
 const canvasEl = document.getElementsByTagName("canvas")[0];
-canvasEl.height = 560;
-canvasEl.width = 460;
+canvasEl.height = 640;
+canvasEl.width = 540;

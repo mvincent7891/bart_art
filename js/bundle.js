@@ -51,12 +51,19 @@
 	
 	var _parse_bart = __webpack_require__(44);
 	
+	// Potential zoom
+	// Bigger image to startSolving
+	// Larger scroll area
+	// Trace needs to stay longer
+	// Maybe view transfers one by one
+	
 	var dataObject = void 0;
 	var loadMap = function loadMap(selector) {
 	  $('#modal').attr('class', 'closed');
 	  $('#modal').removeClass('open');
 	  $('#overlay').attr('class', 'closed');
 	  $('#overlay').removeClass('open');
+	  $('#footer').removeClass('closed');
 	  $(changeCity).text('CHANGE');
 	  if (selector) {
 	    dataObject = new _parse_bart.DataInitializerBART();
@@ -79,8 +86,8 @@
 	//let citySelector = true;
 	
 	var canvasEl = document.getElementsByTagName("canvas")[0];
-	canvasEl.height = 560;
-	canvasEl.width = 460;
+	canvasEl.height = 640;
+	canvasEl.width = 540;
 
 /***/ },
 
@@ -355,8 +362,8 @@
 	    this.minY = 0;
 	    // this.maxY = parseInt(this.canvas.height) - 40;
 	    // this.maxX = parseInt(this.canvas.width) - 40;
-	    this.maxY = 520;
-	    this.maxX = 420;
+	    this.maxY = 600;
+	    this.maxX = 500;
 	    this.extractCoordLimits();
 	    this.mapStations();
 	    var hover = new _animate_list.ListAnimation(this.stations, this.stationCircles, this.stationLines, graph);

@@ -18,8 +18,8 @@ export class SubwayMap {
     this.minY = 0;
     // this.maxY = parseInt(this.canvas.height) - 40;
     // this.maxX = parseInt(this.canvas.width) - 40;
-    this.maxY = 520;
-    this.maxX = 420;
+    this.maxY = 600;
+    this.maxX = 500;
     this.extractCoordLimits();
     this.mapStations();
     const hover = new ListAnimation(this.stations, this.stationCircles,
