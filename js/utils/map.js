@@ -5,21 +5,23 @@ export class SubwayMap {
   constructor (graph, stations) {
     this.graph = graph;
     this.stations = stations;
-    this.interval = Math.floor(1000 / Object.keys(this.stations).length);
     this.stationCircles = {};
     this.stationLines = [];
+    this.interval = Math.floor(1000 / Object.keys(this.stations).length);
+
     this.extractCoordLimits = this.extractCoordLimits.bind(this);
     this.mapStations = this.mapStations.bind(this);
     this.mapCircle = this.mapCircle.bind(this);
     this.drawLine = this.drawLine.bind(this);
+
     this.canvas = document.getElementsByTagName("canvas")[0];
     this.ctx = this.canvas.getContext("2d");
+
     this.minX = 0;
     this.minY = 0;
-    // this.maxY = parseInt(this.canvas.height) - 40;
-    // this.maxX = parseInt(this.canvas.width) - 40;
     this.maxY = 600;
     this.maxX = 500;
+
     this.extractCoordLimits();
     this.mapStations();
     const hover = new ListAnimation(this.stations, this.stationCircles,
@@ -90,14 +92,15 @@ export class SubwayMap {
   }
 
   extractCoordLimits () {
-    // Pull minimum and maximum lat/lng for normalizing map on canvas
     const stations = this.stations;
     const stationNames = Object.keys(this.stations);
     const firstStation = stations[stationNames[0]];
+
     this.minLat = firstStation.lat;
     this.maxLat = firstStation.lat;
     this.minLng = firstStation.lng;
     this.maxLng = firstStation.lng;
+
     let newStation;
     stationNames.forEach(name => {
       newStation = stations[name];
@@ -115,14 +118,11 @@ export class SubwayMap {
   }
 
   mapCoords(lng, lat) {
-    // Pass in (lat, lng); return (x, y) coords for canvas element
     const lngRange = this.maxLng - this.minLng;
     const latRange = this.maxLat - this.minLat;
     const xCoord = Math.floor(this.maxX * (lng - this.minLng) / lngRange);
     const yCoord = Math.floor(this.maxY * (lat - this.minLat) / latRange);
-
     return([xCoord, this.maxY - yCoord]);
-
   }
 
 }

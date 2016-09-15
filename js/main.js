@@ -1,8 +1,3 @@
-// Potential zoom
-// Bigger image to startSolving
-// Larger scroll area
-// Trace needs to stay longer
-// Maybe view transfers one by one
 
 import { DataInitializerNYC } from './utils/parse_nycmta';
 import { DataInitializerBART } from './utils/parse_bart';
@@ -24,14 +19,12 @@ const loadMap = selector => {
 
 const selectNYC = $('#ny');
 $(selectNYC).on('click', loadMap.bind(null, false));
+
 const selectSF = $('#sf');
 $(selectSF).on('click', loadMap.bind(null, true));
 
 const changeCity = $('#change');
 $(changeCity).on('click', () => location.reload());
-
-//let dataObject = new DataInitializerNYC();
-//let citySelector = true;
 
 const canvasEl = document.getElementsByTagName("canvas")[0];
 canvasEl.height = 640;

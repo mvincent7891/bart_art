@@ -51,12 +51,6 @@
 	
 	var _parse_bart = __webpack_require__(44);
 	
-	// Potential zoom
-	// Bigger image to startSolving
-	// Larger scroll area
-	// Trace needs to stay longer
-	// Maybe view transfers one by one
-	
 	var dataObject = void 0;
 	var loadMap = function loadMap(selector) {
 	  $('#modal').attr('class', 'closed');
@@ -74,6 +68,7 @@
 	
 	var selectNYC = $('#ny');
 	$(selectNYC).on('click', loadMap.bind(null, false));
+	
 	var selectSF = $('#sf');
 	$(selectSF).on('click', loadMap.bind(null, true));
 	
@@ -81,9 +76,6 @@
 	$(changeCity).on('click', function () {
 	  return location.reload();
 	});
-	
-	//let dataObject = new DataInitializerNYC();
-	//let citySelector = true;
 	
 	var canvasEl = document.getElementsByTagName("canvas")[0];
 	canvasEl.height = 640;
@@ -349,21 +341,23 @@
 	
 	    this.graph = graph;
 	    this.stations = stations;
-	    this.interval = Math.floor(1000 / Object.keys(this.stations).length);
 	    this.stationCircles = {};
 	    this.stationLines = [];
+	    this.interval = Math.floor(1000 / Object.keys(this.stations).length);
+	
 	    this.extractCoordLimits = this.extractCoordLimits.bind(this);
 	    this.mapStations = this.mapStations.bind(this);
 	    this.mapCircle = this.mapCircle.bind(this);
 	    this.drawLine = this.drawLine.bind(this);
+	
 	    this.canvas = document.getElementsByTagName("canvas")[0];
 	    this.ctx = this.canvas.getContext("2d");
+	
 	    this.minX = 0;
 	    this.minY = 0;
-	    // this.maxY = parseInt(this.canvas.height) - 40;
-	    // this.maxX = parseInt(this.canvas.width) - 40;
 	    this.maxY = 600;
 	    this.maxX = 500;
+	
 	    this.extractCoordLimits();
 	    this.mapStations();
 	    var hover = new _animate_list.ListAnimation(this.stations, this.stationCircles, this.stationLines, graph);
@@ -458,14 +452,15 @@
 	    value: function extractCoordLimits() {
 	      var _this3 = this;
 	
-	      // Pull minimum and maximum lat/lng for normalizing map on canvas
 	      var stations = this.stations;
 	      var stationNames = Object.keys(this.stations);
 	      var firstStation = stations[stationNames[0]];
+	
 	      this.minLat = firstStation.lat;
 	      this.maxLat = firstStation.lat;
 	      this.minLng = firstStation.lng;
 	      this.maxLng = firstStation.lng;
+	
 	      var newStation = void 0;
 	      stationNames.forEach(function (name) {
 	        newStation = stations[name];
@@ -484,12 +479,10 @@
 	  }, {
 	    key: "mapCoords",
 	    value: function mapCoords(lng, lat) {
-	      // Pass in (lat, lng); return (x, y) coords for canvas element
 	      var lngRange = this.maxLng - this.minLng;
 	      var latRange = this.maxLat - this.minLat;
 	      var xCoord = Math.floor(this.maxX * (lng - this.minLng) / lngRange);
 	      var yCoord = Math.floor(this.maxY * (lat - this.minLat) / latRange);
-	
 	      return [xCoord, this.maxY - yCoord];
 	    }
 	  }]);
@@ -526,14 +519,16 @@
 	    this.stations = stations;
 	    this.circles = circles;
 	    this.lines = lines;
+	
 	    this.addOnHover = this.addOnHover.bind(this);
 	    this.drawCircles = this.drawCircles.bind(this);
 	    this.drawLines = this.drawLines.bind(this);
 	    this.updateList = this.updateList.bind(this);
-	    this.canvas = document.getElementsByTagName("canvas")[0];
-	    this.ctx = this.canvas.getContext("2d");
 	    this.clearCanvas = this.clearCanvas.bind(this);
 	    this.startAnimating = this.startAnimating.bind(this);
+	
+	    this.canvas = document.getElementsByTagName("canvas")[0];
+	    this.ctx = this.canvas.getContext("2d");
 	    this.updateList();
 	    setTimeout(function () {
 	      return _this.addOnHover();
@@ -573,23 +568,9 @@
 	      }, 5);
 	    }
 	  }, {
-	    key: "drawCircles",
-	    value: function drawCircles() {
-	      var _this3 = this;
-	
-	      var circle = void 0;
-	      Object.keys(this.circles).forEach(function (id) {
-	        circle = _this3.circles[id];
-	        _this3.ctx.fillStyle = circle[3];
-	        _this3.ctx.beginPath();
-	        _this3.ctx.arc(circle[0], circle[1], circle[2], 0, 2 * Math.PI, false);
-	        _this3.ctx.fill();
-	      });
-	    }
-	  }, {
 	    key: "drawLines",
 	    value: function drawLines() {
-	      var _this4 = this;
+	      var _this3 = this;
 	
 	      var x1 = void 0,
 	          y1 = void 0,
@@ -603,18 +584,32 @@
 	        x2 = _line[2];
 	        y2 = _line[3];
 	
-	        _this4.ctx.beginPath();
-	        _this4.ctx.moveTo(x1, y1);
-	        _this4.ctx.lineTo(x2, y2);
-	        _this4.ctx.lineWidth = 1;
-	        _this4.ctx.strokeStyle = '#676767';
-	        _this4.ctx.stroke();
+	        _this3.ctx.beginPath();
+	        _this3.ctx.moveTo(x1, y1);
+	        _this3.ctx.lineTo(x2, y2);
+	        _this3.ctx.lineWidth = 1;
+	        _this3.ctx.strokeStyle = '#676767';
+	        _this3.ctx.stroke();
 	      });
 	    }
 	  }, {
 	    key: "clearCanvas",
 	    value: function clearCanvas() {
 	      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	    }
+	  }, {
+	    key: "drawCircles",
+	    value: function drawCircles() {
+	      var _this4 = this;
+	
+	      var circle = void 0;
+	      Object.keys(this.circles).forEach(function (id) {
+	        circle = _this4.circles[id];
+	        _this4.ctx.fillStyle = circle[3];
+	        _this4.ctx.beginPath();
+	        _this4.ctx.arc(circle[0], circle[1], circle[2], 0, 2 * Math.PI, false);
+	        _this4.ctx.fill();
+	      });
 	    }
 	  }, {
 	    key: "addOnHover",
@@ -1027,7 +1022,7 @@
 	});
 	var fetchStationData = exports.fetchStationData = function fetchStationData(success) {
 	  $.ajax({
-	    url: 'http://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V',
+	    url: 'https://api.bart.gov/api/stn.aspx?cmd=stns&key=MW9S-E7SL-26DU-VV8V',
 	    method: 'GET',
 	    success: success
 	  });
@@ -1035,7 +1030,7 @@
 	
 	var fetchRoutes = exports.fetchRoutes = function fetchRoutes(success) {
 	  $.ajax({
-	    url: 'http://api.bart.gov/api/route.aspx?cmd=routes&key=MW9S-E7SL-26DU-VV8V',
+	    url: 'https://api.bart.gov/api/route.aspx?cmd=routes&key=MW9S-E7SL-26DU-VV8V',
 	    method: 'GET',
 	    success: success
 	  });
@@ -1043,7 +1038,7 @@
 	
 	var fetchRouteData = exports.fetchRouteData = function fetchRouteData(success, number) {
 	  $.ajax({
-	    url: 'http://api.bart.gov/api/route.aspx?cmd=routeinfo&route=' + number + '&key=MW9S-E7SL-26DU-VV8V',
+	    url: 'https://api.bart.gov/api/route.aspx?cmd=routeinfo&route=' + number + '&key=MW9S-E7SL-26DU-VV8V',
 	    method: 'GET',
 	    success: success
 	  });

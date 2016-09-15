@@ -6,14 +6,16 @@ export class ListAnimation {
     this.stations = stations;
     this.circles = circles;
     this.lines = lines;
+
     this.addOnHover = this.addOnHover.bind(this);
     this.drawCircles = this.drawCircles.bind(this);
     this.drawLines = this.drawLines.bind(this);
     this.updateList = this.updateList.bind(this);
-    this.canvas = document.getElementsByTagName("canvas")[0];
-    this.ctx = this.canvas.getContext("2d");
     this.clearCanvas = this.clearCanvas.bind(this);
     this.startAnimating = this.startAnimating.bind(this);
+
+    this.canvas = document.getElementsByTagName("canvas")[0];
+    this.ctx = this.canvas.getContext("2d");
     this.updateList();
     setTimeout(() => this.addOnHover(), 3000);
     setTimeout(() => this.startAnimating(), 3000);
@@ -45,6 +47,23 @@ export class ListAnimation {
     }, 5);
   }
 
+  drawLines () {
+    let x1, y1, x2, y2;
+    this.lines.forEach(line => {
+      [x1, y1, x2, y2] = line;
+      this.ctx.beginPath();
+      this.ctx.moveTo(x1, y1);
+      this.ctx.lineTo(x2, y2);
+      this.ctx.lineWidth = 1;
+      this.ctx.strokeStyle = '#676767';
+      this.ctx.stroke();
+    });
+  }
+
+  clearCanvas () {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
   drawCircles () {
     let circle;
     Object.keys(this.circles).forEach(id => {
@@ -61,23 +80,6 @@ export class ListAnimation {
       );
       this.ctx.fill();
     });
-  }
-
-  drawLines () {
-    let x1, y1, x2, y2;
-    this.lines.forEach(line => {
-      [x1, y1, x2, y2] = line;
-      this.ctx.beginPath();
-      this.ctx.moveTo(x1, y1);
-      this.ctx.lineTo(x2, y2);
-      this.ctx.lineWidth = 1;
-      this.ctx.strokeStyle = '#676767';
-      this.ctx.stroke();
-    });
-  }
-
-  clearCanvas () {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   addOnHover () {
