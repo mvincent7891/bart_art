@@ -18,7 +18,7 @@ export class PathFinder {
     this.addOnClick();
     this.destination = undefined;
     this.origin = undefined;
-
+    this.size = 3;
     this.interval = Math.floor(3000 / Object.keys(this.stations).length);
   }
 
@@ -81,7 +81,7 @@ export class PathFinder {
       });
       x = this.circles[nextStation][0];
       y = this.circles[nextStation][1];
-      this.addCircle(x, y, 5, '#00ACC1', i);
+      this.addCircle(x, y, this.size, '#00ACC1', i);
     }
 
     this.clearSearch(i, trace);
@@ -119,13 +119,13 @@ export class PathFinder {
       i += 1;
       x = this.circles[nextStation][0];
       y = this.circles[nextStation][1];
-      this.addCircle(x, y, 5, '#FFC107', (length - i));
+      this.addCircle(x, y, this.size, '#FFC107', (length - i));
       nextStation = trace[nextStation];
     }
     i += 1;
     x = this.circles[nextStation][0];
     y = this.circles[nextStation][1];
-    this.addCircle(x, y, 5, '#FFC107', (length - i));
+    this.addCircle(x, y, this.size, '#FFC107', (length - i));
     this.clearPathFinder();
     this.clearTrace(length, trace);
   }
