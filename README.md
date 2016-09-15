@@ -39,7 +39,7 @@ export const fetchRouteData = (success, number) => {
 
 ### Building a Connected Graph
 
-Unfortunately, transit authorities do not serve up their data as a connected graph. However, once routes and stations are parsed out of the API response, it is straightforward to build a the graph. 
+Unfortunately, transit authorities do not serve up their data as a connected graph. However, once routes and stations are parsed out of the API response, it is straightforward to build the graph. First, route neighbors are added as connected nodes. Additionally, for NYC data, transfers extend the graph to include edges between nodes on separate routes.
 
 ```javascript
 Object.keys(routeConfig).forEach(routeId => {
@@ -56,3 +56,4 @@ Object.keys(routeConfig).forEach(routeId => {
 Stylistically, Transit PathFinder employs a minimalist design, with plenty of white space, primarily black and white color scheme, and a few highlights. This style is achieved with pure CSS and HTML5 Canvas.
 
 ## Future Directions
+The next step for TPF will incorporate distances between stations instead of simple node count when determining optimal routes. The logic will be a bit more complicated: when choosing between children
