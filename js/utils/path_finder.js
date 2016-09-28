@@ -61,7 +61,6 @@ export class PathFinder {
     } else {
       this.origin = this.stations[abbr];
       this.origin['abbr'] = abbr;
-      console.log(this.origin);
       this.circles['origin'] = [x, y, 6, '#FFC107'];
       $("#instructions").text(`Select destination...`);
     }
@@ -114,7 +113,6 @@ export class PathFinder {
   }
 
   highlightTrace(trace, length) {
-    console.log(this);
     const dest = this.destination.abbr;
     const origin = this.origin.abbr;
     $("#instructions").text(`Tracing optimal route...`);

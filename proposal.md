@@ -1,3 +1,9 @@
+Notes:
+- Add different city, remove SF
+- Remove console logs
+- Make it clear that you can select a city in the beginning
+- Make instructions more clear (Click anywhere to reset...)
+
 ## Transit PathFinder Proposal
 
 ### Background
