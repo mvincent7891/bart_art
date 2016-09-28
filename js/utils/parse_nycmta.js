@@ -44,7 +44,11 @@ export class DataInitializerNYC {
           $stationEl = $(`<li>${name}</li>`);
           $stationEl.attr('id', `${abbr}`);
           $stationEl.attr('class', `truncate`);
-          $("#list").append($stationEl);
+          if (Math.random() > .5) {
+            $("#list").append($stationEl);
+          } else {
+            $("#list").prepend($stationEl);        
+          }
         }
       }
     });

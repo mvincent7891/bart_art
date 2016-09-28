@@ -40,16 +40,15 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _parse_nycmta = __webpack_require__(1);
 	
-	var _parse_bart = __webpack_require__(44);
+	var _parse_bart = __webpack_require__(9);
 	
 	var dataObject = void 0;
 	var loadMap = function loadMap(selector) {
@@ -82,8 +81,7 @@
 	canvasEl.width = 540;
 
 /***/ },
-
-/***/ 1:
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -101,11 +99,11 @@
 	
 	var _map = __webpack_require__(3);
 	
-	var _routes = __webpack_require__(41);
+	var _routes = __webpack_require__(6);
 	
-	var _stops = __webpack_require__(42);
+	var _stops = __webpack_require__(7);
 	
-	var _transfers = __webpack_require__(43);
+	var _transfers = __webpack_require__(8);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -158,7 +156,11 @@
 	            $stationEl = $('<li>' + name + '</li>');
 	            $stationEl.attr('id', '' + abbr);
 	            $stationEl.attr('class', 'truncate');
-	            $("#list").append($stationEl);
+	            if (Math.random() > .5) {
+	              $("#list").append($stationEl);
+	            } else {
+	              $("#list").prepend($stationEl);
+	            }
 	          }
 	        }
 	      });
@@ -239,8 +241,7 @@
 	}();
 
 /***/ },
-
-/***/ 2:
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -316,8 +317,7 @@
 	// };
 
 /***/ },
-
-/***/ 3:
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -392,37 +392,39 @@
 	      while (stationsToDraw.length > 0) {
 	        station = stationsToDraw[0][0];
 	        i += 1;
-	        x = this.stations[station].lng;
-	        y = this.stations[station].lat;
+	        if (this.stations[station]) {
+	          x = this.stations[station].lng;
+	          y = this.stations[station].lat;
 	
-	        var _mapCoords = this.mapCoords(x, y);
+	          var _mapCoords = this.mapCoords(x, y);
 	
-	        var _mapCoords2 = _slicedToArray(_mapCoords, 2);
+	          var _mapCoords2 = _slicedToArray(_mapCoords, 2);
 	
-	        a = _mapCoords2[0];
-	        b = _mapCoords2[1];
+	          a = _mapCoords2[0];
+	          b = _mapCoords2[1];
 	
-	        if (stationsToDraw[0][1]) {
-	          x2 = this.stations[stationsToDraw[0][1]].lng;
-	          y2 = this.stations[stationsToDraw[0][1]].lat;
+	          if (stationsToDraw[0][1]) {
+	            x2 = this.stations[stationsToDraw[0][1]].lng;
+	            y2 = this.stations[stationsToDraw[0][1]].lat;
 	
-	          var _mapCoords3 = this.mapCoords(x2, y2);
+	            var _mapCoords3 = this.mapCoords(x2, y2);
 	
-	          var _mapCoords4 = _slicedToArray(_mapCoords3, 2);
+	            var _mapCoords4 = _slicedToArray(_mapCoords3, 2);
 	
-	          c = _mapCoords4[0];
-	          d = _mapCoords4[1];
+	            c = _mapCoords4[0];
+	            d = _mapCoords4[1];
 	
-	          this.drawLine(a, b, c, d, i);
-	        }
-	        this.mapCircle(a, b, i, station);
-	        this.stationCircles[station] = [a + 20, b + 20, 2, '#474747'];
-	        stationsDrawn.push(stationsToDraw[0][0]);
-	        graph[station].forEach(function (newStation) {
-	          if (stationsDrawn.indexOf(newStation) === -1) {
-	            stationsToDraw.push([newStation, station]);
+	            this.drawLine(a, b, c, d, i);
 	          }
-	        });
+	          this.mapCircle(a, b, i, station);
+	          this.stationCircles[station] = [a + 20, b + 20, 2, '#474747'];
+	          stationsDrawn.push(stationsToDraw[0][0]);
+	          graph[station].forEach(function (newStation) {
+	            if (stationsDrawn.indexOf(newStation) === -1) {
+	              stationsToDraw.push([newStation, station]);
+	            }
+	          });
+	        }
 	        stationsToDraw = stationsToDraw.slice(1);
 	      }
 	    }
@@ -497,8 +499,7 @@
 	}();
 
 /***/ },
-
-/***/ 4:
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -656,8 +657,7 @@
 	}();
 
 /***/ },
-
-/***/ 5:
+/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -740,7 +740,6 @@
 	      } else {
 	        this.origin = this.stations[abbr];
 	        this.origin['abbr'] = abbr;
-	        console.log(this.origin);
 	        this.circles['origin'] = [x, y, 6, '#FFC107'];
 	        $("#instructions").text('Select destination...');
 	      }
@@ -800,7 +799,6 @@
 	  }, {
 	    key: 'highlightTrace',
 	    value: function highlightTrace(trace, length) {
-	      console.log(this);
 	      var dest = this.destination.abbr;
 	      var origin = this.origin.abbr;
 	      $("#instructions").text('Tracing optimal route...');
@@ -863,8 +861,7 @@
 	}();
 
 /***/ },
-
-/***/ 41:
+/* 6 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -878,8 +875,7 @@
 	};
 
 /***/ },
-
-/***/ 42:
+/* 7 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -893,8 +889,7 @@
 	};
 
 /***/ },
-
-/***/ 43:
+/* 8 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -908,8 +903,7 @@
 	};
 
 /***/ },
-
-/***/ 44:
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -921,7 +915,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _bart = __webpack_require__(45);
+	var _bart = __webpack_require__(10);
 	
 	var BART_API = _interopRequireWildcard(_bart);
 	
@@ -1024,7 +1018,7 @@
 	      Object.keys(routeConfig).forEach(function (routeId) {
 	        var route = routeConfig[routeId];
 	        route.slice(0, route.length - 1).forEach(function (station, index) {
-	          if (!graph[route[index]].includes(route[index + 1])) {
+	          if (graph[route[index]] && !graph[route[index]].includes(route[index + 1])) {
 	            graph[route[index]].push(route[index + 1]);
 	          }
 	        });
@@ -1037,8 +1031,7 @@
 	}();
 
 /***/ },
-
-/***/ 45:
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1071,6 +1064,5 @@
 	};
 
 /***/ }
-
-/******/ });
+/******/ ]);
 //# sourceMappingURL=bundle.js.map

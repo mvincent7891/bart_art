@@ -86,7 +86,7 @@ export class DataInitializerBART {
     Object.keys(routeConfig).forEach(routeId => {
       const route = routeConfig[routeId];
       route.slice(0,(route.length - 1)).forEach((station, index) => {
-        if (!graph[route[index]].includes(route[index + 1])) {
+        if (graph[route[index]] && !graph[route[index]].includes(route[index + 1])) {
           graph[route[index]].push(route[index + 1]);
         }
       });

@@ -8,7 +8,7 @@ export class SubwayMap {
     this.stationCircles = {};
     this.stationLines = [];
     this.interval = Math.floor(1000 / Object.keys(this.stations).length);
-  
+
     this.bindFunctions = this.bindFunctions.bind(this);
     this.bindFunctions();
 
@@ -47,23 +47,25 @@ export class SubwayMap {
     while (stationsToDraw.length > 0) {
       station = stationsToDraw[0][0];
       i += 1;
-      x = this.stations[station].lng;
-      y = this.stations[station].lat;
-      [a, b] = this.mapCoords(x,y);
-      if (stationsToDraw[0][1]) {
-        x2 = this.stations[stationsToDraw[0][1]].lng;
-        y2 = this.stations[stationsToDraw[0][1]].lat;
-        [c, d] = this.mapCoords(x2,y2);
-        this.drawLine(a, b, c, d, i);
-      }
-      this.mapCircle(a, b, i, station);
-      this.stationCircles[station] = [a + 20, b + 20, 2, '#474747'];
-      stationsDrawn.push(stationsToDraw[0][0]);
-      graph[station].forEach(newStation => {
-        if (stationsDrawn.indexOf(newStation) === -1) {
-          stationsToDraw.push([newStation, station]);
+      if (this.stations[station]) {
+        x = this.stations[station].lng;
+        y = this.stations[station].lat;
+        [a, b] = this.mapCoords(x,y);
+        if (stationsToDraw[0][1]) {
+          x2 = this.stations[stationsToDraw[0][1]].lng;
+          y2 = this.stations[stationsToDraw[0][1]].lat;
+          [c, d] = this.mapCoords(x2,y2);
+          this.drawLine(a, b, c, d, i);
         }
-      });
+        this.mapCircle(a, b, i, station);
+        this.stationCircles[station] = [a + 20, b + 20, 2, '#474747'];
+        stationsDrawn.push(stationsToDraw[0][0]);
+        graph[station].forEach(newStation => {
+          if (stationsDrawn.indexOf(newStation) === -1) {
+            stationsToDraw.push([newStation, station]);
+          }
+        });      
+      }
       stationsToDraw = stationsToDraw.slice(1);
     }
   }
