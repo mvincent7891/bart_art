@@ -64,10 +64,16 @@ export class SubwayMap {
           if (stationsDrawn.indexOf(newStation) === -1) {
             stationsToDraw.push([newStation, station]);
           }
-        });      
+        });
       }
       stationsToDraw = stationsToDraw.slice(1);
     }
+    // console.log(stationsDrawn);
+    Object.keys(this.stations).forEach(abbr => {
+      if (stationsDrawn.indexOf(abbr) === -1) {
+        $(`#${abbr}`).remove();
+      }
+    });
   }
 
   drawLine (x1, y1, x2, y2, i) {

@@ -47,7 +47,7 @@ export class DataInitializerNYC {
           if (Math.random() > .5) {
             $("#list").append($stationEl);
           } else {
-            $("#list").prepend($stationEl);        
+            $("#list").prepend($stationEl);
           }
         }
       }
@@ -118,6 +118,8 @@ export class DataInitializerNYC {
         graph[stop1].push(stop2);
       }
     });
+    console.log(graph);
+
     const map = new SubwayMap(graph, this.stations);
   }
 }

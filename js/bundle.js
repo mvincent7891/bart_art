@@ -233,6 +233,8 @@
 	          graph[stop1].push(stop2);
 	        }
 	      });
+	      console.log(graph);
+	
 	      var map = new _map.SubwayMap(graph, this.stations);
 	    }
 	  }]);
@@ -427,6 +429,12 @@
 	        }
 	        stationsToDraw = stationsToDraw.slice(1);
 	      }
+	      // console.log(stationsDrawn);
+	      Object.keys(this.stations).forEach(function (abbr) {
+	        if (stationsDrawn.indexOf(abbr) === -1) {
+	          $("#" + abbr).remove();
+	        }
+	      });
 	    }
 	  }, {
 	    key: "drawLine",
